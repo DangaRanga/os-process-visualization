@@ -12,7 +12,7 @@
     "animejs": "^3.2.1",
     "core-js": "^3.6.5",
     "mosha-vue-toastify": "^1.0.23",
-    "vue": "^2.6.14",
+    "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vue-template-compiler": "^2.6.14"
   },
