@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <article>
     <p>{{ `P${pid}` }}</p>
@@ -24,3 +25,8 @@ div {
   background: #df4f4f;
 }
 </style>
+=======
+<template></template>
+<script></script>
+<style></style>
+>>>>>>> 141bb05bba63bac58f213132c1e422acbbfd33a2

@@ -4,6 +4,7 @@
     <main id="simulator">
       <!-- Respective sections for respective components -->
       <section id="algorithm-selection"><algorithm-selector /></section>
+<<<<<<< HEAD
       <section id="processes">
         <process :pid="1"></process>
         <process :pid="2"></process>
@@ -12,6 +13,14 @@
       <section id="cpu">CPU</section>
     </main>
     <button id="restart-btn">Restart Simulation</button>
+=======
+      <div id="middle-segment">
+        <section id="processes">Processes</section>
+        <button id="restart-btn">Restart Simulation</button>
+      </div>
+      <section id="cpu">CPU</section>
+    </main>
+>>>>>>> 141bb05bba63bac58f213132c1e422acbbfd33a2
   </div>
 </template>
 <script>
@@ -23,7 +32,7 @@ import anime from "animejs";
 export default {
   components: {
     "algorithm-selector": AlgoritmSelector,
-    process: Process,
+    "process": Process,
   },
 
   methods: {
@@ -66,6 +75,7 @@ export default {
   background: #4a632b;
   cursor: pointer;
 }
+<<<<<<< HEAD
 
 #processes {
   display: flex;
@@ -73,4 +83,6 @@ export default {
   align-items: center;
   justify-content: center;
 }
+=======
+>>>>>>> 141bb05bba63bac58f213132c1e422acbbfd33a2
 </style>
