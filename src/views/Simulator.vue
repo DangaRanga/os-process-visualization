@@ -5,13 +5,13 @@
       <!-- Respective sections for respective components -->
       <section id="algorithm-selection"><algorithm-selector /></section>
       <section id="processes">
-        <process :pid="1"></process>
-        <process :pid="2"></process>
-        <process :pid="3"></process>
+        <process class="el p1" :pid="1"></process>
+        <process class="el p2" :pid="2"></process>
+        <process class="el p3" :pid="3"></process>
       </section>
       <section id="cpu">CPU</section>
     </main>
-    <button :click="animateProcesses()" id="restart-btn">
+    <button @click="animateProcesses()" id="restart-btn">
       Restart Simulation
     </button>
   </div>
@@ -28,13 +28,30 @@ export default {
     process: Process,
   },
 
+  data() {
+    return {
+      timeline: null,
+    };
+  },
   methods: {
+    /**
+     * Temporary method for animating all processes
+     */
     animateProcesses() {
-      anime({
-        targets: "#processes",
-        translateX: 250,
+      // Each process will have a different animation stored in animations.js
+
+      this.timeline.add({
+        targets: ".p1",
+        translateX: [0, 200],
+        delay: anime.stagger(300),
+        direction: "alternate",
+        duration: 3000,
       });
     },
+  },
+
+  mounted() {
+    this.timeline = anime.timeline();
   },
 };
 </script>
