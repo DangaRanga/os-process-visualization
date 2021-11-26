@@ -4,6 +4,7 @@
     <main id="simulator">
       <!-- Respective sections for respective components -->
       <section id="algorithm-selection"><algorithm-selector /></section>
+      <!-- Processes should be dynamically inserted after data is emitted from algorithm selector -->
       <section id="processes">
         <process class="el p1" :pid="1"></process>
         <process class="el p2" :pid="2"></process>
@@ -31,6 +32,7 @@ export default {
   data() {
     return {
       timeline: null,
+      duration: null,
     };
   },
   methods: {
@@ -38,20 +40,41 @@ export default {
      * Temporary method for animating all processes
      */
     animateProcesses() {
-      // Each process will have a different animation stored in animations.js
+      // Each process algo will have a different animation stored in animations.js
+      const testAnimationTimeline = [
+        {
+          targets: ".p1",
+          translateX: 500,
+          direction: "alternate",
+          opacity: 0,
+        },
+        {
+          targets: ".p2",
+          translateX: 500,
+          direction: "alternate",
+          opacity: 0,
+        },
+        {
+          targets: ".p3",
+          translateX: 500,
+          direction: "alternate",
+          opacity: 0,
+        },
+      ];
 
-      this.timeline.add({
-        targets: ".p1",
-        translateX: [0, 200],
-        delay: anime.stagger(300),
-        direction: "alternate",
-        duration: 3000,
-      });
+      // Insert animation for each process
+      for (let animation of testAnimationTimeline) {
+        this.timeline.add(animation);
+      }
     },
   },
 
   mounted() {
-    this.timeline = anime.timeline();
+    // Anime.js timeline can only be initalized in created() or mounted() lifecycle method
+    this.timeline = anime.timeline({
+      easing: "easeOutExpo",
+      duration: 3000, // Represents total burst time. Individual times can be subdivisions of this value
+    });
   },
 };
 </script>
