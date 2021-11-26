@@ -11,7 +11,9 @@
       </section>
       <section id="cpu">CPU</section>
     </main>
-    <button id="restart-btn">Restart Simulation</button>
+    <button :click="animateProcesses()" id="restart-btn">
+      Restart Simulation
+    </button>
   </div>
 </template>
 <script>
@@ -30,6 +32,7 @@ export default {
     animateProcesses() {
       anime({
         targets: "#processes",
+        translateX: 250,
       });
     },
   },
