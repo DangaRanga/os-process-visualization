@@ -100,21 +100,6 @@ export class SJF extends ProcessorSchedulingAlgorithm {
     this.queue.sort((a, b) => a.burstTime - b.burstTime);
   }
 
-  // /**
-  //  * Animates the Initial Queueing Process for SJF
-  //  * @returns
-  //  */
-  // assessQueue() {
-  //   let queueing = [];
-
-  //   this.queuesort();
-  //   for (let process of this.processes) {
-  //     queueing.add(EnterQueue(".p" + process.pid, position));
-  //   }
-
-  //   return queueing;
-  // }
-
   generateTimeline() {
     var tmline = [];
 

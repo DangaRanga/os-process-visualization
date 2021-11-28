@@ -94,7 +94,7 @@ export default {
 
       for (let i = 0; i < this.noProcesses; i++) {
         // Initialize all burst times as 0
-        this.processes.push(new Process(i + 1, 0, this.quantum));
+        this.processes.push(new Process(i + 1, 0, 0));
       }
     },
 
@@ -118,7 +118,7 @@ export default {
         }
 
         case "round_robin": {
-          const roundRobinAlgo = RoundRobin(this.processes);
+          const roundRobinAlgo = RoundRobin(this.processes, this.quantum);
           return roundRobinAlgo.generateTimeline();
         }
 
