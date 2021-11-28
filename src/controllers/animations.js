@@ -1,4 +1,4 @@
-export function enterProc(target, duration = 500, X = 800, scale = 0.8) {
+export function enterProc(target, duration = 1500, X = 800, scale = 0.8) {
   return {
     targets: target,
     duration: duration,
@@ -20,7 +20,7 @@ export function inProc(target, time = 1) {
   };
 }
 
-export function leaveProcDisperse(target, duration = 900, X = 900) {
+export function leaveProcDisperse(target, duration = 1500, X = 900) {
   return {
     targets: target,
     translateX: X,
@@ -30,7 +30,7 @@ export function leaveProcDisperse(target, duration = 900, X = 900) {
   };
 }
 
-export function shiftinQueue(target, duration = 500, X = 100) {
+export function shiftinQueue(target, duration = 1500, X = 120) {
   return {
     targets: target,
     duration: duration,

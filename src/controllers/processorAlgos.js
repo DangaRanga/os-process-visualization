@@ -1,5 +1,3 @@
-import { processExpression } from "@vue/compiler-core";
-import { timeline } from "animejs";
 import {
   inProc,
   enterProc,
@@ -114,23 +112,24 @@ export class SJF extends ProcessorSchedulingAlgorithm {
   //   return queueing;
   // }
 
-  generateTimeline(duration) {
+  generateTimeline() {
     var tmline = [];
 
     // tmline.join(set_up);
+    this.queuesort();
 
     while (this.queue.length != 0) {
       let element = this.dequeue();
       let name = ".p" + String(element.pid);
 
-      minitl = [];
-      minitl.push(enterProc(name, 500, 800, 0.8));
+      let minitl = [];
+      minitl.push(enterProc(name, 1500, 350, 0.8));
       for (let i = 0; i < this.queue.length; i++) {
         minitl.push(shiftinQueue(".p" + String(this.queue[i].pid)));
       }
       minitl.push(inProc(name, element.burstTime));
       minitl.push(leaveProcDisperse(name));
-      tmline.push(minitl);
+      tmline = tmline.concat(minitl);
     }
 
     return tmline;

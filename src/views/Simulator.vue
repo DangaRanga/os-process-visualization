@@ -24,7 +24,7 @@
 <script>
 import AlgoritmSelector from "../components/AlgorithmSelector/AlgorithmSelector.vue";
 import Process from "../components/Process/Process.vue";
-import { FCFS } from "../controllers/processorAlgos";
+import { SJF } from "../controllers/processorAlgos";
 
 import anime from "animejs";
 
@@ -64,7 +64,7 @@ export default {
       ];
       const myqueue = new SJF(processes);
       const testAnimationTimeline = myqueue.generateTimeline();
-
+      console.log(testAnimationTimeline);
       // Insert animation for each process
       for (let animation of testAnimationTimeline) {
         this.timeline.add(animation);
