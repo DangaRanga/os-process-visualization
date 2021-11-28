@@ -1,5 +1,3 @@
-/* eslint-disable no-undef  */
-
 import { processExpression } from "@vue/compiler-core";
 import { timeline } from "animejs";
 import {
@@ -7,7 +5,7 @@ import {
   enterProc,
   leaveProcDisperse,
   shiftinQueue,
-} from "animation.js";
+} from "./animations";
 
 // Base class for all processor scheduling algorithms
 export class ProcessorSchedulingAlgorithm {
