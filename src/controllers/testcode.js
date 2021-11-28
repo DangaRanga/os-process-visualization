@@ -11,10 +11,11 @@ const testing = function testAlgo() {
       time: 4,
     },
   ];
+  console.log(processes);
   let queue = new PriorityScheduling(processes);
   queue.sortqueue((a, b) => a.time - b.time);
+  console.log(queue.processes);
   let mytest = queue.generateTimeline();
-  console.log(processes);
   console.log(mytest);
   return "Just a test";
 };

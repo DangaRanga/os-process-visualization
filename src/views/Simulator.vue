@@ -24,7 +24,7 @@
 <script>
 import AlgoritmSelector from "../components/AlgorithmSelector/AlgorithmSelector.vue";
 import Process from "../components/Process/Process.vue";
-import { FCFS } from "../controllers/processorAlgos";
+import { PriorityScheduling } from "../controllers/processorAlgos";
 
 import anime from "animejs";
 
@@ -52,17 +52,21 @@ export default {
         {
           pid: 1,
           time: 5,
+          priority: 2,
         },
         {
           pid: 2,
           time: 4,
+          priority: 1,
         },
         {
           pid: 3,
           time: 3,
+          priority: 4,
         },
       ];
-      const myqueue = new FCFS(processes);
+      const myqueue = new PriorityScheduling(processes);
+      myqueue.sortqueue((a, b) => a.priority - b.priority);
       const testAnimationTimeline = myqueue.generateTimeline();
 
       // Insert animation for each process
