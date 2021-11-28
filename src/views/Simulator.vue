@@ -24,7 +24,7 @@
 <script>
 import AlgoritmSelector from "../components/AlgorithmSelector/AlgorithmSelector.vue";
 import Process from "../components/Process/Process.vue";
-import { SJF } from "../controllers/processorAlgos";
+import { FCFS } from "../controllers/processorAlgos";
 
 import anime from "animejs";
 
@@ -52,17 +52,21 @@ export default {
         {
           pid: 1,
           burstTime: 5,
+          arrival: 2,
         },
         {
           pid: 2,
           burstTime: 4,
+          arrival: 3,
         },
         {
           pid: 3,
           burstTime: 3,
+          arrival: 1,
         },
       ];
-      const myqueue = new SJF(processes);
+      const myqueue = new FCFS(processes);
+      console.log(myqueue);
       const testAnimationTimeline = myqueue.generateTimeline();
       console.log(testAnimationTimeline);
       // Insert animation for each process
