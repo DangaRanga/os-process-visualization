@@ -138,8 +138,13 @@ export default {
       }
     },
     nextStep() {
-      this.first_step = false;
-      this.second_step = true;
+      if (this.noProcesses < 2) {
+        // Alert that two or more processes should be entered
+        console.log("More than 1 process should be entered");
+      } else {
+        this.first_step = false;
+        this.second_step = true;
+      }
     },
     prevStep() {
       console.log;
