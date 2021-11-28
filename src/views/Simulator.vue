@@ -28,11 +28,8 @@
 <script>
 import AlgoritmSelector from "../components/AlgorithmSelector/AlgorithmSelector.vue";
 import Process from "../components/Process/Process.vue";
-<<<<<<< HEAD
 import { PriorityScheduling } from "../controllers/processorAlgos";
-=======
 import { SJF } from "../controllers/processorAlgos";
->>>>>>> dev
 
 import anime from "animejs";
 
@@ -65,7 +62,6 @@ export default {
       const processes = [
         {
           pid: 1,
-<<<<<<< HEAD
           time: 5,
           priority: 2,
         },
@@ -82,20 +78,6 @@ export default {
       ];
       const myqueue = new PriorityScheduling(processes);
       myqueue.sortqueue((a, b) => a.priority - b.priority);
-=======
-          burstTime: 5,
-        },
-        {
-          pid: 2,
-          burstTime: 4,
-        },
-        {
-          pid: 3,
-          burstTime: 3,
-        },
-      ];
-      const myqueue = new SJF(processes);
->>>>>>> dev
       const testAnimationTimeline = myqueue.generateTimeline();
       console.log(testAnimationTimeline);
       // Insert animation for each process
