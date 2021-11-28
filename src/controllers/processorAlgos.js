@@ -1,5 +1,8 @@
 // Base class for all processor scheduling algorithms
-class ProcessorSchedulingAlgorithm {
+export class ProcessorSchedulingAlgorithm {
+  // processes = [{}, {}, {}]
+  processes = [];
+
   constructor(processes) {
     this.processes = processes;
   }
@@ -10,19 +13,24 @@ class ProcessorSchedulingAlgorithm {
 /**
  * Class for the first come first serve algorithm
  */
-class FCFS extends ProcessorSchedulingAlgorithm {}
+export class FCFS extends ProcessorSchedulingAlgorithm {}
 
 /**
  * Class for the shortest job first algorithm
  */
-class ShortestJobFirst extends ProcessorSchedulingAlgorithm {}
+export class ShortestJobFirst extends ProcessorSchedulingAlgorithm {}
 
 /**
  * Class for the round robin algorithm
  */
-class RoundRobin extends ProcessorSchedulingAlgorithm {}
+export class RoundRobin extends ProcessorSchedulingAlgorithm {}
 
 /**
- * Class for the round robin algorithm
+ * Class for the priority scheduling algorithm
  */
-class PriorityScheduling extends ProcessorSchedulingAlgorithm {}
+export class PriorityScheduling extends ProcessorSchedulingAlgorithm {}
+
+/**
+ * Class for the shortest remaining time algorithm
+ */
+export class ShortestRemainingTime extends ProcessorSchedulingAlgorithm {}

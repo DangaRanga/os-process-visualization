@@ -15,17 +15,25 @@
       <label for="no-processes">Number of Processes </label>
       <input type="number" v-model="processes" />
     </div>
-    <button>Next Step</button>
+    <button type="button" @click="emitProcesses">Next Step</button>
   </form>
 </template>
 <script>
 export default {
-  name: "AlgoritmSelector",
+  name: "AlgorithmSelector",
   data() {
     return {
       selected: null,
-      processes: 0,
+      processes: [],
+      noProcesses: 0,
     };
+  },
+
+  methods: {
+    emitProcesses() {
+      console.log("Emitting data");
+      this.$emit("algorithm-selection", this.processes);
+    },
   },
 };
 </script>
@@ -50,7 +58,7 @@ button {
   border-radius: 5px;
   transition: all 0.3s ease-in-out;
   outline: none;
-  margin: 2% 0;
+  margin: 20;
 }
 
 button:hover {

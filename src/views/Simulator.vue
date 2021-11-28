@@ -12,7 +12,11 @@
       </section>
       <section id="cpu">CPU</section>
     </main>
-    <button @click="animateProcesses()" id="restart-btn">
+    <button
+      @algorithm-selection="algorithmSelection"
+      @click="animateProcesses()"
+      id="restart-btn"
+    >
       Restart Simulation
     </button>
   </div>
@@ -33,6 +37,7 @@ export default {
     return {
       timeline: null,
       duration: null,
+      processes: 0,
     };
   },
   methods: {
@@ -41,6 +46,7 @@ export default {
      */
     animateProcesses() {
       // Each process algo will have a different animation stored in animations.js
+      console.log(this.processes);
       const testAnimationTimeline = [
         {
           targets: ".p1",
@@ -66,6 +72,10 @@ export default {
       for (let animation of testAnimationTimeline) {
         this.timeline.add(animation);
       }
+    },
+
+    algorithmSelection(selectorData) {
+      this.processes = selectorData;
     },
   },
 
