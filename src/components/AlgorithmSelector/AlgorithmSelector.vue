@@ -47,7 +47,7 @@
 import { Process } from "../../models/process";
 import {
   RoundRobin,
-  ShortestJobFirst,
+  SJF,
   FCFS,
   PriorityScheduling,
 } from "../../controllers/processorAlgos";
@@ -94,7 +94,7 @@ export default {
 
       for (let i = 0; i < this.noProcesses; i++) {
         // Initialize all burst times as 0
-        this.processes.push(new Process(i + 1, 0, this.quantum));
+        this.processes.push(new Process(i + 1, 0, 0));
       }
     },
 
@@ -118,7 +118,7 @@ export default {
         }
 
         case "round_robin": {
-          const roundRobinAlgo = RoundRobin(this.processes);
+          const roundRobinAlgo = RoundRobin(this.processes, this.quantum);
           return roundRobinAlgo.generateTimeline();
         }
 
@@ -128,7 +128,7 @@ export default {
         }
 
         case "shortest_job": {
-          const shortestJobAlgo = ShortestJobFirst(this.processes);
+          const shortestJobAlgo = SJF(this.processes);
           return shortestJobAlgo.generateTimeline();
         }
 
