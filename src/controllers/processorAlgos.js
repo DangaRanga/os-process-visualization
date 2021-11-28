@@ -13,7 +13,7 @@ export class ProcessorSchedulingAlgorithm {
     this.processes.push(process);
   }
 
-  dequeu() {
+  dequeue() {
     return this.processes.pop();
   }
 
@@ -25,7 +25,44 @@ export class ProcessorSchedulingAlgorithm {
 /**
  * Class for the first come first serve algorithm
  */
-export class FCFS extends ProcessorSchedulingAlgorithm {}
+export class FCFS extends ProcessorSchedulingAlgorithm {
+  super(processes) {
+    this.processes = processes;
+  }
+
+  generateTimeline() {
+    let firstX = 800;
+    let testAnimationTimeline = [];
+    this.processes.forEach((process) => {
+      firstX -= 100;
+      testAnimationTimeline.push(
+        {
+          targets: ".p" + process.pid,
+          translateX: firstX,
+          scaleY: 0.8,
+        },
+        {
+          targets: ".p" + process.pid,
+          direction: "alternate",
+          rotate: {
+            value: 360 * process.time,
+            duration: 500 * process.time,
+            easing: "linear",
+          },
+        },
+        {
+          targets: ".p" + process.pid,
+          translateX: 900,
+          direction: "alternate",
+          opacity: 0,
+          duration: 500,
+        }
+      );
+    });
+    console.log(testAnimationTimeline);
+    return testAnimationTimeline;
+  }
+}
 
 /**
  * Class for the shortest job first algorithm

@@ -24,6 +24,7 @@
 <script>
 import AlgoritmSelector from "../components/AlgorithmSelector/AlgorithmSelector.vue";
 import Process from "../components/Process/Process.vue";
+import { FCFS } from "../controllers/processorAlgos";
 
 import anime from "animejs";
 
@@ -47,33 +48,22 @@ export default {
      */
     animateProcesses() {
       // Each process algo will have a different animation stored in animations.js
-      console.log(this.selectorData);
-      const testAnimationTimeline = [
+      const processes = [
         {
-          targets: ".p1",
-          translateX: 515,
-          scaleY: 0.2,
-          direction: "alternate",
+          pid: 1,
+          time: 5,
         },
         {
-          targets: ".p2",
-          translateX: 424,
-          scaleY: 0.2,
-          direction: "alternate",
+          pid: 2,
+          time: 4,
         },
         {
-          targets: ".p2",
-          translateY: 100,
-          direction: "alternate",
+          pid: 3,
+          time: 3,
         },
-        {
-          targets: ".p3",
-          translateX: 331,
-          scaleY: 0.2,
-          direction: "alternate",
-        },
-        { targets: ".p3", translateY: 200, direction: "alternate" },
       ];
+      const myqueue = new FCFS(processes);
+      const testAnimationTimeline = myqueue.generateTimeline();
 
       // Insert animation for each process
       for (let animation of testAnimationTimeline) {
@@ -142,8 +132,8 @@ export default {
 }
 
 #box {
-  height: 200px;
-  width: 100px;
+  height: 150px;
+  width: 200px;
   background-color: #f5f5f5;
   color: #282828;
 }
