@@ -41,7 +41,8 @@ export class FCFS extends ProcessorSchedulingAlgorithm {
   generateTimeline() {
     let firstX = 800;
     let testAnimationTimeline = [];
-    this.processes.forEach((process) => {
+    for (let i = 0; i < array.length; i++) {
+      const process = array[i];
       firstX -= 100;
       testAnimationTimeline.push(
         {
@@ -67,8 +68,9 @@ export class FCFS extends ProcessorSchedulingAlgorithm {
           duration: 500,
         }
       );
-    });
+    }
     console.log(testAnimationTimeline);
+
     return testAnimationTimeline;
   }
 }
