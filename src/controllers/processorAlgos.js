@@ -33,42 +33,73 @@ export class ProcessorSchedulingAlgorithm {
  * Class for the First Come First Serve  algorithm
  */
 export class FCFS extends ProcessorSchedulingAlgorithm {
-  super(processes) {
-    this.processes = processes;
+  queue = [];
+
+  constructor(processes) {
+    super(processes);
+    this.processes.sort((a, b) => b.arrival - a.arrival);
+    this.queue = this.processes;
   }
 
   generateTimeline() {
-    let firstX = 800;
-    let testAnimationTimeline = [];
-    this.processes.forEach((process) => {
-      firstX -= 100;
-      testAnimationTimeline.push(
-        {
-          targets: ".p" + process.pid,
-          translateX: firstX,
-          scaleY: 0.8,
-        },
-        {
-          targets: ".p" + process.pid,
-          direction: "alternate",
-          rotate: {
-            value: 360 * process.time,
-            duration: 500 * process.time,
-            easing: "linear",
-          },
-          borderRadius: 50,
-        },
-        {
-          targets: ".p" + process.pid,
-          translateX: 900,
-          direction: "alternate",
-          opacity: 0,
-          duration: 500,
-        }
+    // let firstX = 800;
+    // let testAnimationTimeline = [];
+    // this.processes.forEach((process) => {
+    //   firstX -= 100;
+    //   testAnimationTimeline.push(
+    //     {
+    //       targets: ".p" + process.pid,
+    //       translateX: firstX,
+    //       scaleY: 0.8,
+    //     },
+    //     {
+    //       targets: ".p" + process.pid,
+    //       direction: "alternate",
+    //       rotate: {
+    //         value: 360 * process.time,
+    //         duration: 500 * process.time,
+    //         easing: "linear",
+    //       },
+    //       borderRadius: 50,
+    //     },
+    //     {
+    //       targets: ".p" + process.pid,
+    //       translateX: 900,
+    //       direction: "alternate",
+    //       opacity: 0,
+    //       duration: 500,
+    //     }
+    //   );
+    // });
+    // console.log(testAnimationTimeline);
+    // return testAnimationTimeline;
+
+    var tmline = [];
+    var iteration = 1;
+    const distanceTOCPU = 350,
+      shift = 100;
+    // tmline.join(set_up);
+    // this.queuesort();
+    while (this.queue.length != 0) {
+      let element = this.dequeue();
+      let name = ".p" + String(element.pid);
+
+      let minitl = [];
+      minitl.push(
+        enterProc(name, 1500, distanceTOCPU + (iteration - 1) * shift, 0.8)
       );
-    });
-    console.log(testAnimationTimeline);
-    return testAnimationTimeline;
+      for (let i = 0; i < this.queue.length; i++) {
+        minitl.push(
+          shiftinQueue(".p" + String(this.queue[i].pid), 500, iteration * shift)
+        );
+      }
+      minitl.push(inProc(name, element.burstTime));
+      minitl.push(leaveProcDisperse(name));
+      tmline = tmline.concat(minitl);
+      iteration++;
+    }
+
+    return tmline;
   }
 }
 
