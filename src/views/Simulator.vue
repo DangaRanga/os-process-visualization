@@ -1,7 +1,7 @@
 <template>
   <div id="container">
     <h1>Simulation for First Come First Serve Algorithm</h1>
-    <h1>Processes {{ this.selectorData }}</h1>
+    <h1>Processes {{ this.selectorData.length }}</h1>
     <main id="simulator">
       <!-- Respective sections for respective components -->
       <section id="algorithm-selection">
@@ -10,9 +10,12 @@
 
       <!-- Processes should be dynamically inserted after data is emitted from algorithm selector -->
       <section id="processes">
-        <process class="el p1" :pid="1"></process>
-        <process class="el p2" :pid="2"></process>
-        <process class="el p3" :pid="3"></process>
+        <process
+          v-for="process in selectorData"
+          :class="'p' + process.pid"
+          :key="process.pid"
+          :pid="process.pid"
+        ></process>
       </section>
       <section id="cpu"><div id="box">CPU</div></section>
     </main>
@@ -38,7 +41,7 @@ export default {
       timeline: null,
       duration: null,
       processes: 0,
-      selectorData: 0,
+      selectorData: [],
     };
   },
   methods: {
@@ -53,6 +56,7 @@ export default {
           targets: ".p1",
           translateX: 515,
           scaleY: 0.2,
+          duration: 3000,
           direction: "alternate",
         },
         {
@@ -64,12 +68,14 @@ export default {
         {
           targets: ".p2",
           translateY: 100,
+          duration: 3000,
           direction: "alternate",
         },
         {
           targets: ".p3",
           translateX: 331,
           scaleY: 0.2,
+          duration: 3000,
           direction: "alternate",
         },
         { targets: ".p3", translateY: 200, direction: "alternate" },
@@ -91,7 +97,7 @@ export default {
     // Anime.js timeline can only be initalized in created() or mounted() lifecycle method
     this.timeline = anime.timeline({
       easing: "easeOutExpo",
-      duration: 3000, // Represents total burst time. Individual times can be subdivisions of this value
+      // Represents total burst time. Individual times can be subdivisions of this value
     });
   },
 };
@@ -130,7 +136,6 @@ export default {
 
 #processes {
   display: flex;
-  flex-direction: space-around;
   align-items: center;
   justify-content: center;
 }

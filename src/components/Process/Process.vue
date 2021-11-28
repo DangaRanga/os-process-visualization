@@ -15,6 +15,7 @@ export default {
 <style scoped>
 article {
   margin: 0 5%;
+  transition: ease-in-out 0.5s;
 }
 
 div {
