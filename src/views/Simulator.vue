@@ -51,22 +51,28 @@ export default {
       const testAnimationTimeline = [
         {
           targets: ".p1",
-          translateX: 500,
+          translateX: 515,
+          scaleY: 0.2,
           direction: "alternate",
-          opacity: 0,
         },
         {
           targets: ".p2",
-          translateX: 500,
+          translateX: 424,
+          scaleY: 0.2,
           direction: "alternate",
-          opacity: 0,
+        },
+        {
+          targets: ".p2",
+          translateY: 100,
+          direction: "alternate",
         },
         {
           targets: ".p3",
-          translateX: 500,
+          translateX: 331,
+          scaleY: 0.2,
           direction: "alternate",
-          opacity: 0,
         },
+        { targets: ".p3", translateY: 200, direction: "alternate" },
       ];
 
       // Insert animation for each process
