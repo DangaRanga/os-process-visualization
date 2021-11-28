@@ -3,6 +3,7 @@ import {
   enterProc,
   leaveProcDisperse,
   shiftinQueue,
+  shuffle,
 } from "./animations";
 
 // Base class for all processor scheduling algorithms
@@ -112,6 +113,7 @@ export class SJF extends ProcessorSchedulingAlgorithm {
     this.queue = this.processes.slice();
     this.currentpostion = {};
     this.sortedposition = {};
+    this.relativeposition = {};
   }
 
   dequeue() {
@@ -125,10 +127,6 @@ export class SJF extends ProcessorSchedulingAlgorithm {
 
   queuesort() {
     this.queue.sort((a, b) => b.burstTime - a.burstTime);
-    console.log(this.processes);
-    for (let process of this.queue) {
-      console.log(process);
-    }
   }
 
   /**
@@ -139,16 +137,27 @@ export class SJF extends ProcessorSchedulingAlgorithm {
     this.queuesort();
     let queueing = [];
 
-    // const shift = 100;
+    const shift = 95;
 
     for (let i = 0; i < this.queue.length; i++) {
-      this.currentpostion["i" + String(i)] = this.processes[i].pid;
-      this.sortedposition["i" + String(i)] = this.queue[i].pid;
+      let element = this.processes[i];
+      this.currentpostion[String(element.pid)] = i;
+      for (let j = 0; j < this.queue.length; j++) {
+        if (element.pid == this.queue[j].pid) {
+          this.sortedposition[String(this.queue[j].pid)] = j;
+        }
+      }
     }
 
-    // for (let process of this.processes) {
-    //   queueing.add(EnterQueue(".p" + process.pid, position));
-    // }
+    for (let i of Object.keys(this.currentpostion)) {
+      let a = this.currentpostion[i],
+        b = this.sortedposition[i],
+        movement = (b - a) * shift;
+      if (movement != 0) {
+        queueing.push(shuffle(".p" + i, 1500, movement));
+      }
+      this.relativeposition[i] = movement;
+    }
 
     return queueing;
   }
@@ -157,32 +166,44 @@ export class SJF extends ProcessorSchedulingAlgorithm {
     var tmline = [];
     var iteration = 1;
     const distanceTOCPU = 350,
-      shift = 100;
+      shift = 95;
 
-    this.queuesort();
+    let update = this.assessQueue();
+    tmline = tmline.concat(update);
 
     while (this.queue.length != 0) {
       let element = this.dequeue();
       let name = ".p" + String(element.pid);
-
+      let prev = this.relativeposition[element.pid];
       let minitl = [];
       minitl.push(
-        enterProc(name, 1500, distanceTOCPU + (iteration - 1) * shift, 0.8)
+        enterProc(
+          name,
+          1500,
+          distanceTOCPU + (iteration - 1) * shift + prev,
+          0.8
+        )
       );
-      for (let i = 0; i < this.queue.length; i++) {
+      for (let i = this.queue.length - 1; i > -1; i--) {
         minitl.push(
-          shiftinQueue(".p" + String(this.queue[i].pid), 500, iteration * shift)
+          shiftinQueue(
+            ".p" + String(this.queue[i].pid),
+            500,
+            (iteration - 1) * shift + prev
+          )
         );
       }
       minitl.push(inProc(name, element.burstTime));
       minitl.push(leaveProcDisperse(name));
       tmline = tmline.concat(minitl);
       iteration++;
-      console.log(this.queue);
-      for (let process of this.queue) {
-        console.log(process);
-      }
+      // console.log(this.queue);
+      // for (let process of this.queue) {
+      //   console.log(process);
+      // }
     }
+
+    console.log(tmline);
 
     return tmline;
   }
