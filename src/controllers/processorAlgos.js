@@ -1,14 +1,11 @@
-<<<<<<< HEAD
 /* eslint-disable no-undef */
 import { timeline } from "animejs";
-=======
 import {
   inProc,
   enterProc,
   leaveProcDisperse,
   shiftinQueue,
 } from "./animations";
->>>>>>> dev
 
 // Base class for all processor scheduling algorithms
 export class ProcessorSchedulingAlgorithm {
