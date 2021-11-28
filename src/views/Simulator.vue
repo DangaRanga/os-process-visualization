@@ -1,22 +1,22 @@
 <template>
   <div id="container">
     <h1>Simulation for First Come First Serve Algorithm</h1>
+    <h1>Processes {{ this.selectorData }}</h1>
     <main id="simulator">
       <!-- Respective sections for respective components -->
-      <section id="algorithm-selection"><algorithm-selector /></section>
+      <section id="algorithm-selection">
+        <algorithm-selector @select-processes="algoSelection" />
+      </section>
+
       <!-- Processes should be dynamically inserted after data is emitted from algorithm selector -->
       <section id="processes">
         <process class="el p1" :pid="1"></process>
         <process class="el p2" :pid="2"></process>
         <process class="el p3" :pid="3"></process>
       </section>
-      <section id="cpu">CPU</section>
+      <section id="cpu"><div id="box">CPU</div></section>
     </main>
-    <button
-      @algorithm-selection="algorithmSelection"
-      @click="animateProcesses()"
-      id="restart-btn"
-    >
+    <button @click="animateProcesses()" id="restart-btn">
       Restart Simulation
     </button>
   </div>
@@ -38,6 +38,7 @@ export default {
       timeline: null,
       duration: null,
       processes: 0,
+      selectorData: 0,
     };
   },
   methods: {
@@ -46,7 +47,7 @@ export default {
      */
     animateProcesses() {
       // Each process algo will have a different animation stored in animations.js
-      console.log(this.processes);
+      console.log(this.selectorData);
       const testAnimationTimeline = [
         {
           targets: ".p1",
@@ -74,8 +75,9 @@ export default {
       }
     },
 
-    algorithmSelection(selectorData) {
-      this.processes = selectorData;
+    algoSelection(selectorData) {
+      console.log(selectorData);
+      this.selectorData = selectorData;
     },
   },
 
@@ -125,5 +127,18 @@ export default {
   flex-direction: space-around;
   align-items: center;
   justify-content: center;
+}
+
+#cpu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#box {
+  height: 200px;
+  width: 100px;
+  background-color: #f5f5f5;
+  color: #282828;
 }
 </style>

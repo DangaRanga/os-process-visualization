@@ -13,7 +13,7 @@
     </div>
     <div class="input-field">
       <label for="no-processes">Number of Processes </label>
-      <input type="number" v-model="processes" />
+      <input type="number" v-model="noProcesses" />
     </div>
     <button type="button" @click="emitProcesses">Next Step</button>
   </form>
@@ -32,7 +32,8 @@ export default {
   methods: {
     emitProcesses() {
       console.log("Emitting data");
-      this.$emit("algorithm-selection", this.processes);
+      console.log(this.noProcesses);
+      this.$emit("select-processes", this.noProcesses);
     },
   },
 };
