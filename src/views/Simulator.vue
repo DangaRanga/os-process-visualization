@@ -29,7 +29,8 @@
 import AlgoritmSelector from "../components/AlgorithmSelector/AlgorithmSelector.vue";
 import Process from "../components/Process/Process.vue";
 // import { PriorityScheduling } from "../controllers/processorAlgos";
-import { SJF } from "../controllers/processorAlgos";
+// import { SJF } from "../controllers/processorAlgos";
+import { FCFS } from "../controllers/processorAlgos";
 
 import anime from "animejs";
 
@@ -59,27 +60,30 @@ export default {
         this.animationCompleted = false;
       }
 
-      const processes = [
-        {
-          pid: 1,
-          burstTime: 5,
-          // priority: 2,
-        },
-        {
-          pid: 2,
-          burstTime: 4,
-          // priority: 1,
-        },
-        {
-          pid: 3,
-          burstTime: 3,
-          // priority: 4,
-        },
-      ];
+      // const processes = [
+      //   {
+      //     pid: 1,
+      //     burstTime: 5,
+      //     // priority: 2,
+      //   },
+      //   {
+      //     pid: 2,
+      //     burstTime: 4,
+      //     // priority: 1,
+      //   },
+      //   {
+      //     pid: 3,
+      //     burstTime: 3,
+      //     // priority: 4,
+      //   },
+      // ];
+      const processes = this.selectorData;
+      console.log(processes);
       // const myqueue = new PriorityScheduling(processes);
       // myqueue.sortqueue((a, b) => a.priority - b.priority);
-      const myqueue = new SJF(processes);
+      const myqueue = new FCFS(processes);
       const testAnimationTimeline = myqueue.generateTimeline();
+      console.log(testAnimationTimeline);
       // Insert animation for each process
       for (let animation of testAnimationTimeline) {
         this.timeline.add(animation);
