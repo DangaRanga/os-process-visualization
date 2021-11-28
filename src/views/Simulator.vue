@@ -64,7 +64,7 @@ export default {
       ];
       const myqueue = new SJF(processes);
       const testAnimationTimeline = myqueue.generateTimeline();
-      console.log(testAnimationTimeline);
+      // console.log(testAnimationTimeline);
       // Insert animation for each process
       for (let animation of testAnimationTimeline) {
         this.timeline.add(animation);

@@ -76,48 +76,58 @@ export class FCFS extends ProcessorSchedulingAlgorithm {
  * Class for the Shortest Job First first algorithm
  */
 export class SJF extends ProcessorSchedulingAlgorithm {
-  queue = [];
-
   constructor(processes) {
     super(processes);
-    this.queue = this.processes;
+    this.queue = this.processes.slice();
+    this.currentpostion = {};
+    this.sortedposition = {};
   }
 
   dequeue() {
-    let element = this.queue[0];
-    this.queue = this.queue.slice(1);
+    let element = this.queue.pop();
     return element;
   }
 
   enqueue(element) {
-    this.queue.push(element);
+    this.queue.unshift(element);
   }
 
   queuesort() {
-    this.queue.sort((a, b) => a.burstTime - b.burstTime);
+    this.queue.sort((a, b) => b.burstTime - a.burstTime);
+    console.log(this.processes);
+    for (let process of this.queue) {
+      console.log(process);
+    }
   }
 
-  // /**
-  //  * Animates the Initial Queueing Process for SJF
-  //  * @returns
-  //  */
-  // assessQueue() {
-  //   let queueing = [];
+  /**
+   * Animates the Initial Shuffling Process for SJF
+   * @returns
+   */
+  assessQueue() {
+    this.queuesort();
+    let queueing = [];
 
-  //   this.queuesort();
-  //   for (let process of this.processes) {
-  //     queueing.add(EnterQueue(".p" + process.pid, position));
-  //   }
+    // const shift = 100;
 
-  //   return queueing;
-  // }
+    for (let i = 0; i < this.queue.length; i++) {
+      this.currentpostion["i" + String(i)] = this.processes[i].pid;
+      this.sortedposition["i" + String(i)] = this.queue[i].pid;
+    }
+
+    // for (let process of this.processes) {
+    //   queueing.add(EnterQueue(".p" + process.pid, position));
+    // }
+
+    return queueing;
+  }
 
   generateTimeline() {
     var tmline = [];
     var iteration = 1;
     const distanceTOCPU = 350,
       shift = 100;
-    // tmline.join(set_up);
+
     this.queuesort();
 
     while (this.queue.length != 0) {
@@ -137,6 +147,10 @@ export class SJF extends ProcessorSchedulingAlgorithm {
       minitl.push(leaveProcDisperse(name));
       tmline = tmline.concat(minitl);
       iteration++;
+      console.log(this.queue);
+      for (let process of this.queue) {
+        console.log(process);
+      }
     }
 
     return tmline;

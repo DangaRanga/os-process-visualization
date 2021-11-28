@@ -1,3 +1,11 @@
+export function shuffle(target, duration = 1500, X = 800) {
+  return {
+    targets: target,
+    duration: duration,
+    translateX: X,
+  };
+}
+
 export function enterProc(target, duration = 1500, X = 800, scale = 0.8) {
   return {
     targets: target,
