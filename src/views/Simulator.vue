@@ -100,6 +100,7 @@ export default {
 
   mounted() {
     // Anime.js timeline can only be initalized in created() or mounted() lifecycle method
+    this.algoSelection();
     this.timeline = anime.timeline({
       easing: "easeOutExpo",
       // Represents total burst time. Individual times can be subdivisions of this value
@@ -143,6 +144,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #4e4b4b;
 }
 
 #cpu {
