@@ -15,6 +15,7 @@
           :class="'p' + process.pid"
           :key="process.pid"
           :pid="process.pid"
+          :burstTime="process.burstTime"
         ></process>
       </section>
       <section id="cpu"><div id="box">CPU</div></section>
@@ -47,7 +48,7 @@ export default {
   },
   methods: {
     /**
-     * Temporary method for animating all processes
+     * Main method for driving animation
      */
     animateProcesses() {
       // Each process algo will have a different animation stored in animations.js
@@ -95,9 +96,9 @@ export default {
 </script>
 <style scoped>
 #container {
-  height: 100vh;
-  overflow: hidden;
   text-align: center;
+  height: 100vh;
+  background: #282828;
 }
 
 #container h1 {

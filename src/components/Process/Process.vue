@@ -1,7 +1,7 @@
 <template>
   <article>
     <p>{{ `P${pid}` }}</p>
-    <div id="proces-body"></div>
+    <div id="proces-body">{{ burstTime }}ms</div>
   </article>
 </template>
 <script>
@@ -21,6 +21,10 @@ article {
 div {
   height: 50px;
   width: 50px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   background: #df4f4f;
 }

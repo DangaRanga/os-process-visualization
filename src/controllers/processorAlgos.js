@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { timeline } from "animejs";
 
 // Base class for all processor scheduling algorithms

@@ -16,7 +16,7 @@
         <label for="no-processes">Number of Processes </label>
         <input type="number" v-model="noProcesses" />
       </div>
-      <div class="input-field" v-if="algorithm === 'Round Robin'">
+      <div class="input-field" v-if="algorithm === 'round_robin'">
         <label for="no-processes">Quantum</label>
         <input type="number" v-model="quantum" />
       </div>
@@ -29,7 +29,7 @@
         v-for="(burstTime, index) in processes.length"
         :key="burstTime"
       >
-        <label for="no-processes">Burst Time for P {{ burstTime + 1 }} </label>
+        <label for="no-processes">Burst Time for P{{ burstTime }} </label>
         <input type="number" @input="burstTimeInputHandler(index, $event)" />
       </div>
       <div class="input-field" v-if="algorithm === 'round_robin'">
@@ -105,23 +105,26 @@ export default {
     },
 
     determineAnimation() {
-      switch (algorithm) {
-        case "fcfs":
+      switch (this.algorithm) {
+        case "fcfs": {
           const fcfsAlgo = FCFS(this.processes);
+          return fcfsAlgo.generateTimeline();
+        }
 
-          break;
+        case "round_robin": {
+          const roundRobinAlgo = RoundRobin(this.processes);
+          return roundRobinAlgo.generateTimeline();
+        }
 
-        case "round_robin":
-          const RoundRobinAlgo = RoundRobin(this.processes);
-          break;
-
-        case "priority":
+        case "priority": {
           const prioritySchedulAlgo = PriorityScheduling(this.processes);
-          break;
+          return prioritySchedulAlgo.generateTimeline();
+        }
 
-        case "shortest_job":
+        case "shortest_job": {
           const shortestJobAlgo = ShortestJobFirst(this.processes);
-          break;
+          return shortestJobAlgo.generateTimeline();
+        }
 
         default:
           // Alert that algorithm wasn't selected
