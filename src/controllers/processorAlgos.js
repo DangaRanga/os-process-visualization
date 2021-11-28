@@ -49,6 +49,7 @@ export class FCFS extends ProcessorSchedulingAlgorithm {
             duration: 500 * process.time,
             easing: "linear",
           },
+          borderRadius: 50,
         },
         {
           targets: ".p" + process.pid,
