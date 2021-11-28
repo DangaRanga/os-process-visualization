@@ -47,7 +47,7 @@
 import { Process } from "../../models/process";
 import {
   RoundRobin,
-  ShortestJobFirst,
+  SJF,
   FCFS,
   PriorityScheduling,
 } from "../../controllers/processorAlgos";
@@ -128,7 +128,7 @@ export default {
         }
 
         case "shortest_job": {
-          const shortestJobAlgo = ShortestJobFirst(this.processes);
+          const shortestJobAlgo = SJF(this.processes);
           return shortestJobAlgo.generateTimeline();
         }
 

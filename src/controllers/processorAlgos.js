@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-import { timeline } from "animejs";
 import {
   inProc,
   enterProc,
@@ -138,6 +137,7 @@ export class SJF extends ProcessorSchedulingAlgorithm {
   }
 }
 
+export class RoundRobin extends ProcessorSchedulingAlgorithm {}
 /**
  * Class for the Round Robin algorithm
  */
