@@ -8,6 +8,18 @@ export class ProcessorSchedulingAlgorithm {
   }
 
   getNextProcess() {}
+
+  enqueue(process) {
+    this.processes.push(process);
+  }
+
+  dequeu() {
+    return this.processes.pop();
+  }
+
+  sortqueue(compare) {
+    this.processes.sort(compare);
+  }
 }
 
 /**
