@@ -78,7 +78,7 @@ export default {
       ];
       // const myqueue = new PriorityScheduling(processes);
       // myqueue.sortqueue((a, b) => a.priority - b.priority);
-      const myqueue = SJF(processes);
+      const myqueue = new SJF(processes);
       const testAnimationTimeline = myqueue.generateTimeline();
       // Insert animation for each process
       for (let animation of testAnimationTimeline) {
