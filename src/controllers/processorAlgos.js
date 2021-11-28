@@ -227,7 +227,7 @@ export class PriorityScheduling extends ProcessorSchedulingAlgorithm {
           direction: "alternate",
           rotate: {
             value: 360 * process.time,
-            duration: 500 * process.time,
+            duration: 550 * process.time,
             easing: "linear",
           },
           borderRadius: 50,
