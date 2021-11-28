@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form v-if="first_step">
+    <form v-if="step === 1">
       <h3>Select Algorithm</h3>
       <div class="input-field">
         <label for="algorithm-type">Select Algorithm </label>
@@ -16,13 +16,30 @@
         <label for="no-processes">Number of Processes </label>
         <input type="number" v-model="noProcesses" />
       </div>
+      <div class="input-field" v-if="algorithm === 'fcfs'">
+        <!-- Map out the process orders from comptued property -->
+        <label for="process-order">Process Order </label>
+        <select v-model="processOrder">
+          <option
+            v-for="(combination, index) in processCombinations"
+            :key="index"
+            :value="combination.value"
+          >
+            {{ combination.text }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Display quantum time only if Round Robin is the algorithm -->
       <div class="input-field" v-if="algorithm === 'round_robin'">
         <label for="no-processes">Quantum</label>
         <input type="number" v-model="quantum" />
       </div>
       <button type="button" @click="emitProcesses">Next Step</button>
     </form>
-    <form v-if="second_step">
+
+    <!-- Display the second page of the form -->
+    <form v-if="step === 2">
       <h3>Add burst times</h3>
       <div
         class="input-field"
@@ -32,19 +49,21 @@
         <label for="no-processes">Burst Time for P{{ burstTime }} </label>
         <input type="number" @input="burstTimeInputHandler(index, $event)" />
       </div>
-      <div class="input-field" v-if="algorithm === 'round_robin'">
-        <label for="no-processes">Quantum</label>
-        <input type="number" v-model="quantum" />
-      </div>
       <div id="button_group">
         <button type="button" @click="prevStep">Prev Step</button>
         <button type="button" @click="emitProcesses">Start Animation</button>
       </div>
     </form>
+
+    <!-- Display the third page of the form if priority scheduling -->
+    <form v-if="algorithm === 'priority_scheduling'"></form>
   </div>
 </template>
 <script>
 import { Process } from "../../models/process";
+
+import { permutations } from "../../util/permutations";
+
 import {
   RoundRobin,
   SJF,
@@ -60,15 +79,35 @@ export default {
       processes: [],
       noProcesses: 0,
       quantum: 0,
-      first_step: true,
-      second_step: false,
+      step: 1,
       animation: {},
+      processOrder: [1, 2, 3], // Default in ascending order
     };
   },
 
+  computed: {
+    processCombinations() {
+      // Generate array with PIDs
+      const pidArray = [];
+      for (let i = 0; i < this.noProcesses; i++) {
+        pidArray.push(i + 1);
+      }
+
+      // Generate permutations of PIDS
+      const pidPermutations = permutations(pidArray);
+
+      // Push object representation and string representation to be stored in v-model
+      const processCombinations = [];
+      for (let permutation of pidPermutations) {
+        let permStr = permutation.join(",");
+        processCombinations.push({ value: permutation, text: permStr });
+      }
+      return processCombinations;
+    },
+  },
   methods: {
     /**
-     * Sends over process data to display current processes
+     * Sends over process data from step 1 in form to display current processes
      * then toggles next step in form
      */
     emitProcesses() {
@@ -77,7 +116,15 @@ export default {
       this.nextStep();
       console.log(this.noProcesses);
       console.log(this.processes);
+
       this.$emit("select-processes", this.processes);
+    },
+
+    /**
+     * Sends all data required for the animation after
+     */
+    emitAnimation() {
+      this.$emit("animation-data", this.animation);
     },
 
     /**
@@ -142,14 +189,11 @@ export default {
         // Alert that two or more processes should be entered
         console.log("More than 1 process should be entered");
       } else {
-        this.first_step = false;
-        this.second_step = true;
+        this.step += 1;
       }
     },
     prevStep() {
-      console.log;
-      this.first_step = true;
-      this.second_step = false;
+      this.step -= 1;
     },
   },
 };
