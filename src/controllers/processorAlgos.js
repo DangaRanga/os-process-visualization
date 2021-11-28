@@ -20,6 +20,10 @@ export class ProcessorSchedulingAlgorithm {
   }
 
   getNextProcess() {}
+
+  sortqueue(compare) {
+    this.processes.sort(compare);
+  }
 }
 
 /**
@@ -78,7 +82,7 @@ export class ShortestJobFirst extends ProcessorSchedulingAlgorithm {
   }
 
   dequeue() {
-    element = this.queue[0];
+    let element = this.queue[0];
     this.queue = this.queue.slice(1);
     return element;
   }
@@ -178,14 +182,14 @@ export class RoundRobin extends ProcessorSchedulingAlgorithm {
       duration: duration,
     });
 
-    set_up = assessQueue();
+    let set_up = assessQueue();
 
     for (let i = 0; i < set_up.length; i++) {
       tmline.add(set_up[i]);
     }
 
     while (this.queue.length != 0) {
-      element = this.dequeue();
+      let element = this.dequeue();
       tmline.add(GoToCPU(element));
       tmline.add(ProcessTime(element));
       tmline.add(LeaveCPU(element));
@@ -198,7 +202,49 @@ export class RoundRobin extends ProcessorSchedulingAlgorithm {
 /**
  * Class for the priority scheduling algorithm
  */
-export class PriorityScheduling extends ProcessorSchedulingAlgorithm {}
+export class PriorityScheduling extends ProcessorSchedulingAlgorithm {
+  super(processes) {
+    this.processes = processes;
+  }
+
+  generateTimeline() {
+    let firstX = 800;
+    let testAnimationTimeline = [];
+    this.processes.forEach((process) => {
+      firstX -= 100;
+      testAnimationTimeline.push(
+        {
+          targets: ".p" + process.pid,
+          translateX: firstX,
+          scaleY: 0.8,
+        },
+        {
+          targets: ".p" + process.pid,
+          direction: "alternate",
+          rotate: {
+            value: 360 * process.time,
+            duration: 500 * process.time,
+            easing: "linear",
+          },
+          borderRadius: 50,
+        },
+        {
+          targets: ".p" + process.pid,
+          translateX: 900,
+          direction: "alternate",
+          opacity: 0,
+          duration: 500,
+        }
+      );
+    });
+    console.log(testAnimationTimeline);
+    return testAnimationTimeline;
+  }
+
+  compare() {
+    (a, b) => a.burstTime - b.burstTime;
+  }
+}
 
 /**
  * Class for the shortest remaining time algorithm

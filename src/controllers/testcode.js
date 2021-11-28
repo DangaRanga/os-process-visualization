@@ -1,4 +1,4 @@
-import { FCFS } from "./processorAlgos.js";
+import { PriorityScheduling } from "./processorAlgos.js";
 
 const testing = function testAlgo() {
   const processes = [
@@ -11,7 +11,8 @@ const testing = function testAlgo() {
       time: 4,
     },
   ];
-  let queue = new FCFS(processes);
+  let queue = new PriorityScheduling(processes);
+  queue.sortqueue((a, b) => a.time - b.time);
   let mytest = queue.generateTimeline();
   console.log(processes);
   console.log(mytest);
