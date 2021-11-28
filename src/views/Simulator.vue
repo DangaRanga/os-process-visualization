@@ -44,6 +44,7 @@ export default {
       duration: null,
       processes: 0,
       selectorData: [],
+      animationCompleted: false,
     };
   },
   methods: {
@@ -52,6 +53,11 @@ export default {
      */
     animateProcesses() {
       // Each process algo will have a different animation stored in animations.js
+      if (this.animationCompleted === true) {
+        this.timeline.restart();
+        this.animationCompleted = false;
+      }
+
       const processes = [
         {
           pid: 1,
@@ -77,6 +83,8 @@ export default {
       for (let animation of testAnimationTimeline) {
         this.timeline.add(animation);
       }
+
+      this.animationCompleted = true;
     },
 
     algoSelection(selectorData) {
