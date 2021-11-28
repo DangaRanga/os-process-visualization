@@ -1,3 +1,7 @@
+import { processExpression } from "@vue/compiler-core";
+import { timeline } from "animejs";
+import { MIN_SAFE_INTEGER } from "core-js/core/number";
+
 // Base class for all processor scheduling algorithms
 export class ProcessorSchedulingAlgorithm {
   // processes = [{}, {}, {}]
@@ -7,8 +11,6 @@ export class ProcessorSchedulingAlgorithm {
     this.processes = processes;
   }
 
-  getNextProcess() {}
-
   enqueue(process) {
     this.processes.push(process);
   }
@@ -17,13 +19,11 @@ export class ProcessorSchedulingAlgorithm {
     return this.processes.pop();
   }
 
-  sortqueue(compare) {
-    this.processes.sort(compare);
-  }
+  getNextProcess() {}
 }
 
 /**
- * Class for the first come first serve algorithm
+ * Class for the First Come First Serve  algorithm
  */
 export class FCFS extends ProcessorSchedulingAlgorithm {
   super(processes) {
@@ -66,14 +66,134 @@ export class FCFS extends ProcessorSchedulingAlgorithm {
 }
 
 /**
- * Class for the shortest job first algorithm
+ * Class for the Shortest Job First first algorithm
  */
-export class ShortestJobFirst extends ProcessorSchedulingAlgorithm {}
+export class ShortestJobFirst extends ProcessorSchedulingAlgorithm {
+  queue = [];
+  finished = [];
+
+  constructor(processes) {
+    super(processes);
+    this.queue = this.processes;
+  }
+
+  dequeue() {
+    element = this.queue[0];
+    this.queue = this.queue.slice(1);
+    return element;
+  }
+
+  enqueue(element) {
+    this.queue.push(element);
+  }
+
+  queuesort() {
+    this.queue.sort((a, b) => a.burstTime - b.burstTime);
+  }
+
+  /**
+   * Animates the Initial Queueing Process for SJF
+   * @returns
+   */
+  assessQueue() {
+    let queueing = [];
+
+    this.queuesort();
+    for (let process of this.processes) {
+      queueing.add(EnterQueue(".p" + process.pid, position));
+    }
+
+    return queueing;
+  }
+
+  generateTimeline(duration) {
+    var tmline = timeline({
+      autoplay: false,
+      easing: "linear",
+      duration: duration,
+    });
+
+    set_up = assessQueue();
+
+    for (let i = 0; i < set_up.length; i++) {
+      tmline.add(set_up[i]);
+    }
+
+    while (this.queue.length != 0) {
+      element = this.dequeue();
+      tmline.add(GoToCPU(element));
+      tmline.add(ProcessTime(element));
+      tmline.add(LeaveCPU(element));
+    }
+
+    return tmline;
+  }
+}
 
 /**
- * Class for the round robin algorithm
+ * Class for the Round Robin algorithm
  */
-export class RoundRobin extends ProcessorSchedulingAlgorithm {}
+export class RoundRobin extends ProcessorSchedulingAlgorithm {
+  queue = [];
+  finished = [];
+
+  constructor(processes) {
+    super(processes);
+    this.queue = this.processes;
+  }
+
+  dequeue() {
+    element = this.queue[0];
+    this.queue = this.queue.slice(1);
+    return element;
+  }
+
+  enqueue(element) {
+    this.queue.push(element);
+  }
+
+  queuesort() {
+    this.queue.sort((a, b) => a.burstTime - b.burstTime);
+  }
+
+  /**
+   * Animates the Initial Queueing Process for SJF
+   * @returns
+   */
+  assessQueue() {
+    let queueing = [];
+
+    this.queuesort();
+    for (let process of this.processes) {
+      queueing.add(EnterQueue(".p" + process.pid, position));
+    }
+
+    return queueing;
+  }
+
+  generateTimeline(duration) {
+    var tmline = timeline({
+      autoplay: false,
+      easing: "linear",
+      duration: duration,
+    });
+
+    set_up = assessQueue();
+
+    for (let i = 0; i < set_up.length; i++) {
+      tmline.add(set_up[i]);
+    }
+
+    while (this.queue.length != 0) {
+      element = this.dequeue();
+      tmline.add(GoToCPU(element));
+      tmline.add(ProcessTime(element));
+      tmline.add(LeaveCPU(element));
+    }
+
+    return tmline;
+  }
+}
 
 /**
  * Class for the priority scheduling algorithm
