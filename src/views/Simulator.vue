@@ -51,18 +51,18 @@ export default {
       const processes = [
         {
           pid: 1,
-          time: 5,
+          burstTime: 5,
         },
         {
           pid: 2,
-          time: 4,
+          burstTime: 4,
         },
         {
           pid: 3,
-          time: 3,
+          burstTime: 3,
         },
       ];
-      const myqueue = new FCFS(processes);
+      const myqueue = new SJF(processes);
       const testAnimationTimeline = myqueue.generateTimeline();
 
       // Insert animation for each process

@@ -1,6 +1,13 @@
+/* eslint-disable no-undef  */
+
 import { processExpression } from "@vue/compiler-core";
 import { timeline } from "animejs";
-import { MIN_SAFE_INTEGER } from "core-js/core/number";
+import {
+  inProc,
+  enterProc,
+  leaveProcDisperse,
+  shiftinQueue,
+} from "animation.js";
 
 // Base class for all processor scheduling algorithms
 export class ProcessorSchedulingAlgorithm {
@@ -72,9 +79,8 @@ export class FCFS extends ProcessorSchedulingAlgorithm {
 /**
  * Class for the Shortest Job First first algorithm
  */
-export class ShortestJobFirst extends ProcessorSchedulingAlgorithm {
+export class SJF extends ProcessorSchedulingAlgorithm {
   queue = [];
-  finished = [];
 
   constructor(processes) {
     super(processes);
@@ -95,39 +101,38 @@ export class ShortestJobFirst extends ProcessorSchedulingAlgorithm {
     this.queue.sort((a, b) => a.burstTime - b.burstTime);
   }
 
-  /**
-   * Animates the Initial Queueing Process for SJF
-   * @returns
-   */
-  assessQueue() {
-    let queueing = [];
+  // /**
+  //  * Animates the Initial Queueing Process for SJF
+  //  * @returns
+  //  */
+  // assessQueue() {
+  //   let queueing = [];
 
-    this.queuesort();
-    for (let process of this.processes) {
-      queueing.add(EnterQueue(".p" + process.pid, position));
-    }
+  //   this.queuesort();
+  //   for (let process of this.processes) {
+  //     queueing.add(EnterQueue(".p" + process.pid, position));
+  //   }
 
-    return queueing;
-  }
+  //   return queueing;
+  // }
 
   generateTimeline(duration) {
-    var tmline = timeline({
-      autoplay: false,
-      easing: "linear",
-      duration: duration,
-    });
+    var tmline = [];
 
-    set_up = assessQueue();
-
-    for (let i = 0; i < set_up.length; i++) {
-      tmline.add(set_up[i]);
-    }
+    // tmline.join(set_up);
 
     while (this.queue.length != 0) {
-      element = this.dequeue();
-      tmline.add(GoToCPU(element));
-      tmline.add(ProcessTime(element));
-      tmline.add(LeaveCPU(element));
+      let element = this.dequeue();
+      let name = ".p" + String(element.pid);
+
+      minitl = [];
+      minitl.push(enterProc(name, 500, 800, 0.8));
+      for (let i = 0; i < this.queue.length; i++) {
+        minitl.push(shiftinQueue(".p" + String(this.queue[i].pid)));
+      }
+      minitl.push(inProc(name, element.burstTime));
+      minitl.push(leaveProcDisperse(name));
+      tmline.push(minitl);
     }
 
     return tmline;
@@ -137,67 +142,67 @@ export class ShortestJobFirst extends ProcessorSchedulingAlgorithm {
 /**
  * Class for the Round Robin algorithm
  */
-export class RoundRobin extends ProcessorSchedulingAlgorithm {
-  queue = [];
-  finished = [];
+// export class RoundRobin extends ProcessorSchedulingAlgorithm {
+//   queue = [];
+//   finished = [];
 
-  constructor(processes) {
-    super(processes);
-    this.queue = this.processes;
-  }
+//   constructor(processes) {
+//     super(processes);
+//     this.queue = this.processes;
+//   }
 
-  dequeue() {
-    element = this.queue[0];
-    this.queue = this.queue.slice(1);
-    return element;
-  }
+//   dequeue() {
+//     element = this.queue[0];
+//     this.queue = this.queue.slice(1);
+//     return element;
+//   }
 
-  enqueue(element) {
-    this.queue.push(element);
-  }
+//   enqueue(element) {
+//     this.queue.push(element);
+//   }
 
-  queuesort() {
-    this.queue.sort((a, b) => a.burstTime - b.burstTime);
-  }
+//   queuesort() {
+//     this.queue.sort((a, b) => a.burstTime - b.burstTime);
+//   }
 
-  /**
-   * Animates the Initial Queueing Process for SJF
-   * @returns
-   */
-  assessQueue() {
-    let queueing = [];
+//   /**
+//    * Animates the Initial Queueing Process for SJF
+//    * @returns
+//    */
+//   assessQueue() {
+//     let queueing = [];
 
-    this.queuesort();
-    for (let process of this.processes) {
-      queueing.add(EnterQueue(".p" + process.pid, position));
-    }
+//     this.queuesort();
+//     for (let process of this.processes) {
+//       queueing.add(EnterQueue(".p" + process.pid, position));
+//     }
 
-    return queueing;
-  }
+//     return queueing;
+//   }
 
-  generateTimeline(duration) {
-    var tmline = timeline({
-      autoplay: false,
-      easing: "linear",
-      duration: duration,
-    });
+//   generateTimeline(duration) {
+//     var tmline = timeline({
+//       autoplay: false,
+//       easing: "linear",
+//       duration: duration,
+//     });
 
-    let set_up = assessQueue();
+//     let set_up = assessQueue();
 
-    for (let i = 0; i < set_up.length; i++) {
-      tmline.add(set_up[i]);
-    }
+//     for (let i = 0; i < set_up.length; i++) {
+//       tmline.add(set_up[i]);
+//     }
 
-    while (this.queue.length != 0) {
-      let element = this.dequeue();
-      tmline.add(GoToCPU(element));
-      tmline.add(ProcessTime(element));
-      tmline.add(LeaveCPU(element));
-    }
+//     while (this.queue.length != 0) {
+//       let element = this.dequeue();
+//       tmline.add(GoToCPU(element));
+//       tmline.add(ProcessTime(element));
+//       tmline.add(LeaveCPU(element));
+//     }
 
-    return tmline;
-  }
-}
+//     return tmline;
+//   }
+// }
 
 /**
  * Class for the priority scheduling algorithm
