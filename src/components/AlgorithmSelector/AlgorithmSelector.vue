@@ -100,7 +100,13 @@ export default {
 
     burstTimeInputHandler(index, e) {
       // Assign burst time to process
-      this.processes[index].burstTime = parseInt(e.target.value);
+      const inputTime = parseInt(e.target.value);
+      if (Number.isInteger(inputTime)) {
+        this.processes[index].burstTime = parseInt(inputTime);
+      } else {
+        this.processes[index].burstTime = 0;
+      }
+
       console.log(this.processes);
     },
 
