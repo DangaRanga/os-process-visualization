@@ -4,22 +4,32 @@
       <h3>Select Algorithm</h3>
       <div class="input-field">
         <label for="algorithm-type">Select Algorithm </label>
+
+        <!-- Map out scheduling algorithms -->
         <select v-model="algorithm" class="algorithm-select">
           <option disabled value="">Please select one</option>
-          <option value="fcfs">First Come First Served</option>
-          <option value="priority_scheduling">Priority Scheduling</option>
-          <option value="round_robin">Round Robin</option>
-          <option value="shortest_job">Shortest Job First</option>
+          <option
+            v-for="(algorithm, index) in algorithms"
+            :key="index"
+            :value="{ text: algorithm.text, value: algorithm.value }"
+          >
+            {{ algorithm.text }}
+          </option>
         </select>
       </div>
       <div class="input-field">
         <label for="no-processes">Number of Processes </label>
         <input type="number" v-model="noProcesses" />
       </div>
-      <div class="input-field" v-if="algorithm === 'fcfs'">
-        <!-- Map out the process orders from comptued property -->
+
+      <!-- Map out the process orders from comptued property -->
+      <div
+        class="input-field"
+        v-if="(algorithm.value === 'fcfs') & (noProcesses > 1)"
+      >
         <label for="process-order">Process Order </label>
         <select v-model="processOrder">
+          <option disabled value="">Please a process order</option>
           <option
             v-for="(combination, index) in processCombinations"
             :key="index"
@@ -31,7 +41,7 @@
       </div>
 
       <!-- Display quantum time only if Round Robin is the algorithm -->
-      <div class="input-field" v-if="algorithm === 'round_robin'">
+      <div class="input-field" v-if="algorithm.value === 'round_robin'">
         <label for="no-processes">Quantum</label>
         <input type="number" v-model="quantum" />
       </div>
@@ -51,18 +61,20 @@
       </div>
       <div id="button_group">
         <button type="button" @click="prevStep">Prev Step</button>
-        <button type="button" @click="emitProcesses">Start Animation</button>
+        <button type="button" @click="emitAnimation">Start Animation</button>
       </div>
     </form>
 
-    <!-- Display the third page of the form if priority scheduling -->
-    <form v-if="algorithm === 'priority_scheduling'"></form>
+    <!-- Display the third page of the form if priority scheduling and third step -->
+    <form
+      v-if="(algorithm.value === 'priority_scheduling') & (step === 3)"
+    ></form>
   </div>
 </template>
 <script>
 import { Process } from "../../models/process";
-
 import { permutations } from "../../util/permutations";
+import { schedulingAlgorithms } from "../../util/constants";
 
 import {
   RoundRobin,
@@ -75,7 +87,11 @@ export default {
   name: "AlgorithmSelector",
   data() {
     return {
-      algorithm: null,
+      algorithm: {
+        text: null,
+        value: null,
+      },
+      algorithms: schedulingAlgorithms,
       processes: [],
       noProcesses: 0,
       quantum: 0,
@@ -99,6 +115,7 @@ export default {
       // Push object representation and string representation to be stored in v-model
       const processCombinations = [];
       for (let permutation of pidPermutations) {
+        // Turns array to string i.e) [1,2,3] to "1,2,3"
         let permStr = permutation.join(",");
         processCombinations.push({ value: permutation, text: permStr });
       }
@@ -107,17 +124,24 @@ export default {
   },
   methods: {
     /**
-     * Sends over process data from step 1 in form to display current processes
-     * then toggles next step in form
+     * Sends over process data and scheduling algorithm to parent
+     * to allow for data to be rendered then triggers next step in form
      */
     emitProcesses() {
       console.log("Emitting data");
+
+      // Initialize the processes
       this.generateProcesses();
       this.nextStep();
+
       console.log(this.noProcesses);
       console.log(this.processes);
 
-      this.$emit("select-processes", this.processes);
+      // Sends process and algorithm data to parent
+      this.$emit("select-processes", {
+        processes: this.processes,
+        algorithm: this.algorithm.text,
+      });
     },
 
     /**
@@ -185,6 +209,7 @@ export default {
       }
     },
     nextStep() {
+      console.log(this.algorithm);
       if (this.noProcesses < 2) {
         // Alert that two or more processes should be entered
         console.log("More than 1 process should be entered");
