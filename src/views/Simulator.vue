@@ -7,7 +7,10 @@
     <main id="simulator">
       <!-- Respective sections for respective components -->
       <section id="algorithm-selection">
-        <algorithm-selector @select-processes="algoSelection" />
+        <algorithm-selector
+          @animation-data="setAnimation"
+          @select-processes="algoSelection"
+        />
       </section>
 
       <!-- Processes should be dynamically inserted after data is emitted from algorithm selector -->
@@ -61,35 +64,17 @@ export default {
      * Main method for driving animation
      */
     animateProcesses() {
+      // If timeline is empty don't animate
+      if (this.animation.length === 0) {
+        return;
+      }
       // Each process algo will have a different animation stored in animations.js
       if (this.animationCompleted === true) {
         this.timeline.restart();
         this.animationCompleted = false;
       }
 
-      const processes = [
-        {
-          pid: 1,
-          burstTime: 2,
-          arrival: 2,
-        },
-        {
-          pid: 2,
-          burstTime: 5,
-          arrival: 3,
-        },
-        {
-          pid: 3,
-          burstTime: 3,
-          arrival: 1,
-        },
-      ];
-      // const myqueue = new PriorityScheduling(processes);
-      // myqueue.sortqueue((a, b) => a.priority - b.priority);
-      const myqueue = new SJF(processes);
-      const testAnimationTimeline = myqueue.generateTimeline();
-      // Insert animation for each process
-      for (let animation of testAnimationTimeline) {
+      for (let animation of this.animation) {
         this.timeline.add(animation);
       }
 
@@ -99,6 +84,12 @@ export default {
     algoSelection(selectorData) {
       console.log(selectorData);
       this.selectorData = selectorData;
+    },
+
+    setAnimation(animationData) {
+      console.log("Timeline emitted", animationData);
+      this.animation = animationData;
+      console.log("Processes: ", this.selectorData.processes);
     },
   },
 
