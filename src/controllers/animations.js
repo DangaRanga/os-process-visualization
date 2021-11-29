@@ -1,3 +1,12 @@
+export function shuffle(target, duration = 1500, Y = 800, offset = "0") {
+  return {
+    targets: target,
+    duration: duration,
+    translateY: Y,
+    offset: offset,
+  };
+}
+
 export function enterProc(target, duration = 1500, X = 800, scale = 0.8) {
   return {
     targets: target,
@@ -9,31 +18,40 @@ export function enterProc(target, duration = 1500, X = 800, scale = 0.8) {
 
 export function inProc(target, time = 1) {
   return {
-    targets: target,
+    targets: target + " #proces-body",
     direction: "alternate",
     rotate: {
       value: 360 * time,
-      duration: 500 * time,
+      duration: 1000 * time,
       easing: "linear",
     },
-    borderRadius: 50,
+    background: {
+      value: "#f96",
+      duration: 500,
+      easing: "linear",
+    },
   };
 }
 
-export function leaveProcDisperse(target, duration = 1500, X = 900) {
+export function leaveProcDisperse(target, duration = 1500) {
   return {
     targets: target,
-    translateX: X,
+    // translateX: X,
     direction: "alternate",
-    opacity: 0,
+    opacity: {
+      value: 0,
+      duration: duration / 10,
+    },
     duration: duration,
+    easing: "easeInQuad",
   };
 }
 
-export function shiftinQueue(target, duration = 1500, X = 120) {
+export function shiftinQueue(target, duration = 1500, Y = 120) {
   return {
     targets: target,
     duration: duration,
-    translateX: X,
+    translateY: Y,
+    easing: "easeInQuad",
   };
 }

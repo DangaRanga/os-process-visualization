@@ -68,18 +68,18 @@ export default {
       const processes = [
         {
           pid: 1,
-          burstTime: 5,
-          // priority: 2,
+          burstTime: 2,
+          arrival: 2,
         },
         {
           pid: 2,
-          burstTime: 4,
-          // priority: 1,
+          burstTime: 5,
+          arrival: 3,
         },
         {
           pid: 3,
           burstTime: 3,
-          // priority: 4,
+          arrival: 1,
         },
       ];
       // const myqueue = new PriorityScheduling(processes);
