@@ -170,6 +170,7 @@ export default {
       this.$emit("select-processes", {
         processes: this.processes,
         algorithm: this.algorithm.text,
+        processOrder: this.processOrder,
       });
     },
 
