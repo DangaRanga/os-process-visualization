@@ -1,8 +1,6 @@
 <template>
   <div id="container">
-    <h1 v-if="selectorData.algorithm">
-      Simulation for {{ selectorData.algorithm }} Algorithm
-    </h1>
+    <h1 v-if="algorithm">Simulation for {{ algorithm }} Algorithm</h1>
     <h1 v-else>Processor Scheduling Algorithm Simulator</h1>
     <main id="simulator">
       <!-- Respective sections for respective components -->
@@ -54,7 +52,7 @@ export default {
       duration: null,
       processes: 0,
       selectorData: {
-        algorithm: null,
+        algorithm: "",
         processes: [],
       },
       animation: [], // Animation emitted
@@ -116,6 +114,11 @@ export default {
       console.log("Timeline emitted", animationData);
       this.animation = animationData;
       console.log("Processes: ", this.selectorData.processes);
+    },
+  },
+  computed: {
+    algorithm() {
+      return this.selectorData.algorithm;
     },
   },
 
