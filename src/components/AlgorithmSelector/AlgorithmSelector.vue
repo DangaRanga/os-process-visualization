@@ -95,6 +95,7 @@
 import { Process } from "../../models/process";
 import { permutations } from "../../util/permutations";
 import { schedulingAlgorithms } from "../../util/constants";
+import { dangerNotification } from "../../util/notifications";
 
 import {
   RoundRobin,
@@ -150,8 +151,16 @@ export default {
     emitProcesses() {
       console.log("Emitting data");
 
+      if (!this.algorithm.text) {
+        dangerNotification("Please select an algorithm");
+        return;
+      }
       // Initialize the processes
-      this.generateProcesses();
+      const generationResult = this.generateProcesses();
+      if (generationResult !== true) {
+        return;
+      }
+
       this.nextStep();
 
       console.log(this.noProcesses);
@@ -179,14 +188,15 @@ export default {
 
       // Prevents more than 5 processes from being added
       if (this.noProcesses > 5) {
-        // Alert that input is invalid
-        return;
+        dangerNotification("No more than 5 processes can be selected");
+        return false;
       }
 
       for (let i = 0; i < this.noProcesses; i++) {
         // Initialize all burst times as 0
         this.processes.push(new Process(i + 1, 0, 0));
       }
+      return true;
     },
 
     burstTimeInputHandler(index, e) {
@@ -244,7 +254,7 @@ export default {
       console.log(this.algorithm);
       if (this.noProcesses < 2) {
         // Alert that two or more processes should be entered
-        console.log("More than 1 process should be entered");
+        dangerNotification("More than 1 process should be entered");
       } else {
         this.step += 1;
       }

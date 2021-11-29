@@ -14,7 +14,6 @@ export default {
 </script>
 <style scoped>
 article {
-  margin: 0 5%;
   animation: pop-in 0.8s ease-in-out;
   transition: ease-in-out 0.5s;
 }
