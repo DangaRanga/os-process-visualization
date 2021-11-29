@@ -7,7 +7,10 @@
     <main id="simulator">
       <!-- Respective sections for respective components -->
       <section id="algorithm-selection">
-        <algorithm-selector @select-processes="algoSelection" />
+        <algorithm-selector
+          @animation-data="setAnimation"
+          @select-processes="algoSelection"
+        />
       </section>
 
       <!-- Processes should be dynamically inserted after data is emitted from algorithm selector -->
@@ -21,12 +24,12 @@
         ></process>
       </section>
       <section id="cpu">
-        <h3>CPU</h3>
+        <h3>Processor</h3>
         <div id="box"><img src="@/assets/Logo(1).svg" /></div>
       </section>
     </main>
     <button @click="animateProcesses()" id="restart-btn">
-      Restart Simulation
+      Start Simulation
     </button>
   </div>
 </template>
@@ -34,7 +37,8 @@
 import AlgoritmSelector from "../components/AlgorithmSelector/AlgorithmSelector.vue";
 import Process from "../components/Process/Process.vue";
 // import { PriorityScheduling } from "../controllers/processorAlgos";
-import { FCFS } from "../controllers/processorAlgos";
+// import { SJF } from "../controllers/processorAlgos";
+// import { FCFS } from "../controllers/processorAlgos";
 
 import anime from "animejs";
 
@@ -53,6 +57,7 @@ export default {
         algorithm: null,
         processes: [],
       },
+      animation: [], // Animation emitted
       animationCompleted: false,
     };
   },
@@ -61,35 +66,41 @@ export default {
      * Main method for driving animation
      */
     animateProcesses() {
+      // If timeline is empty don't animate
+      if (this.animation.length === 0) {
+        return;
+      }
       // Each process algo will have a different animation stored in animations.js
       if (this.animationCompleted === true) {
         this.timeline.restart();
         this.animationCompleted = false;
       }
-
-      const processes = [
-        {
-          pid: 1,
-          burstTime: 2,
-          arrival: 2,
-        },
-        {
-          pid: 2,
-          burstTime: 5,
-          arrival: 3,
-        },
-        {
-          pid: 3,
-          burstTime: 3,
-          arrival: 1,
-        },
-      ];
+      console.log("This is the data: ", this.selectorData.processes);
+      // const processes = [
+      //   {
+      //     pid: 1,
+      //     burstTime: 2,
+      //     arrival: 2,
+      //   },
+      //   {
+      //     pid: 2,
+      //     burstTime: 5,
+      //     arrival: 3,
+      //   },
+      //   {
+      //     pid: 3,
+      //     burstTime: 3,
+      //     arrival: 1,
+      //   },
+      // ];
       // const myqueue = new PriorityScheduling(processes);
       // myqueue.sortqueue((a, b) => a.priority - b.priority);
-      const myqueue = new FCFS(processes);
+      /* const myqueue = new PriorityScheduling(this.selectorData.processes);
+      console.log(myqueue);
       const testAnimationTimeline = myqueue.generateTimeline();
+      console.log(testAnimationTimeline); */
       // Insert animation for each process
-      for (let animation of testAnimationTimeline) {
+      for (let animation of this.animation) {
         this.timeline.add(animation);
       }
 
@@ -100,10 +111,17 @@ export default {
       console.log(selectorData);
       this.selectorData = selectorData;
     },
+
+    setAnimation(animationData) {
+      console.log("Timeline emitted", animationData);
+      this.animation = animationData;
+      console.log("Processes: ", this.selectorData.processes);
+    },
   },
 
   mounted() {
     // Anime.js timeline can only be initalized in created() or mounted() lifecycle method
+    this.algoSelection();
     this.timeline = anime.timeline({
       easing: "easeOutExpo",
       // Represents total burst time. Individual times can be subdivisions of this value
@@ -173,6 +191,8 @@ export default {
     #86be43 0%,
     rgba(134, 190, 67, 0.4) 100%
   );
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
   border: 1px solid #86be43;
   box-sizing: border-box;
   border-radius: 5px;
@@ -190,6 +210,18 @@ export default {
   }
   100% {
     opacity: 1;
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 </style>
