@@ -68,7 +68,7 @@
           Next Step
         </button>
         <button v-else type="button" @click="emitAnimation">
-          Start Animation
+          Create Animation
         </button>
       </div>
     </form>
@@ -86,7 +86,7 @@
       </div>
       <div id="button_group">
         <button type="button" @click="prevStep">Prev Step</button>
-        <button type="button" @click="emitAnimation">Start Animation</button>
+        <button type="button" @click="emitAnimation">Create Animation</button>
       </div>
     </form>
   </div>
@@ -95,7 +95,10 @@
 import { Process } from "../../models/process";
 import { permutations } from "../../util/permutations";
 import { schedulingAlgorithms } from "../../util/constants";
-import { dangerNotification } from "../../util/notifications";
+import {
+  dangerNotification,
+  successNotification,
+} from "../../util/notifications";
 
 import {
   RoundRobin,
@@ -117,7 +120,7 @@ export default {
       noProcesses: 0,
       quantum: 0,
       step: 1,
-      animation: {},
+      animation: [],
       processOrder: [1, 2, 3], // Default in ascending order
     };
   },
@@ -178,6 +181,10 @@ export default {
      * Sends all data required for the animation after
      */
     emitAnimation() {
+      this.determineAnimation();
+      successNotification(
+        "Animation Created, Begin simulation by clicking 'Start Simulation'"
+      );
       this.$emit("animation-data", this.animation);
     },
 
@@ -227,23 +234,27 @@ export default {
     determineAnimation() {
       switch (this.algorithm.value) {
         case "fcfs": {
-          const fcfsAlgo = FCFS(this.processes);
-          return fcfsAlgo.generateTimeline();
+          const fcfsAlgo = new FCFS(this.processes);
+          this.animation = fcfsAlgo.generateTimeline();
+          break;
         }
 
         case "round_robin": {
-          const roundRobinAlgo = RoundRobin(this.processes, this.quantum);
-          return roundRobinAlgo.generateTimeline();
+          const roundRobinAlgo = new RoundRobin(this.processes, this.quantum);
+          this.animation = roundRobinAlgo.generateTimeline();
+          break;
         }
 
         case "priority": {
-          const prioritySchedulAlgo = PriorityScheduling(this.processes);
-          return prioritySchedulAlgo.generateTimeline();
+          const prioritySchedulAlgo = new PriorityScheduling(this.processes);
+          this.animation = prioritySchedulAlgo.generateTimeline();
+          break;
         }
 
         case "shortest_job": {
-          const shortestJobAlgo = SJF(this.processes);
-          return shortestJobAlgo.generateTimeline();
+          const shortestJobAlgo = new SJF(this.processes);
+          this.animation = shortestJobAlgo.generateTimeline();
+          break;
         }
 
         default:

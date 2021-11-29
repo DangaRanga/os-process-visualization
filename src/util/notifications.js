@@ -10,3 +10,11 @@ export function dangerNotification(message) {
     position: "top-center",
   });
 }
+
+export function successNotification(message) {
+  createToast(message, {
+    type: "success",
+    transition: "zoom",
+    position: "top-center",
+  });
+}

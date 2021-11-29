@@ -7,7 +7,10 @@
     <main id="simulator">
       <!-- Respective sections for respective components -->
       <section id="algorithm-selection">
-        <algorithm-selector @select-processes="algoSelection" />
+        <algorithm-selector
+          @animation-data="setAnimation"
+          @select-processes="algoSelection"
+        />
       </section>
 
       <!-- Processes should be dynamically inserted after data is emitted from algorithm selector -->
@@ -26,7 +29,7 @@
       </section>
     </main>
     <button @click="animateProcesses()" id="restart-btn">
-      Restart Simulation
+      Start Simulation
     </button>
   </div>
 </template>
@@ -53,6 +56,7 @@ export default {
         algorithm: null,
         processes: [],
       },
+      animation: [], // Animation emitted
       animationCompleted: false,
     };
   },
@@ -61,6 +65,10 @@ export default {
      * Main method for driving animation
      */
     animateProcesses() {
+      // If timeline is empty don't animate
+      if (this.animation.length === 0) {
+        return;
+      }
       // Each process algo will have a different animation stored in animations.js
       if (this.animationCompleted === true) {
         this.timeline.restart();
@@ -99,6 +107,12 @@ export default {
     algoSelection(selectorData) {
       console.log(selectorData);
       this.selectorData = selectorData;
+    },
+
+    setAnimation(animationData) {
+      console.log("Timeline emitted", animationData);
+      this.animation = animationData;
+      console.log("Processes: ", this.selectorData.processes);
     },
   },
 
