@@ -37,7 +37,6 @@
 import AlgoritmSelector from "../components/AlgorithmSelector/AlgorithmSelector.vue";
 import Process from "../components/Process/Process.vue";
 // import { PriorityScheduling } from "../controllers/processorAlgos";
-import { SJF } from "../controllers/processorAlgos";
 
 import anime from "animejs";
 
