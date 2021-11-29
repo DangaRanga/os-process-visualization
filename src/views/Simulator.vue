@@ -1,7 +1,10 @@
 <template>
   <div id="container">
-    <h1>Simulation for First Come First Serve Algorithm</h1>
-    <h1>Processes {{ this.selectorData.length }}</h1>
+    <h1 v-if="selectorData.algorithm">
+      Simulation for {{ selectorData.algorithm }} Algorithm
+    </h1>
+    <h1 v-else>Processor Scheduling Algorithm Simulator</h1>
+    <h4>No Processes: {{ this.selectorData.processes.length }}</h4>
     <main id="simulator">
       <!-- Respective sections for respective components -->
       <section id="algorithm-selection">
@@ -11,7 +14,7 @@
       <!-- Processes should be dynamically inserted after data is emitted from algorithm selector -->
       <section id="processes">
         <process
-          v-for="process in selectorData"
+          v-for="process in selectorData.processes"
           :class="'p' + process.pid"
           :key="process.pid"
           :pid="process.pid"
@@ -45,7 +48,10 @@ export default {
       timeline: null,
       duration: null,
       processes: 0,
-      selectorData: [],
+      selectorData: {
+        algorithm: null,
+        processes: [],
+      },
       animationCompleted: false,
     };
   },
@@ -122,6 +128,7 @@ export default {
   display: grid;
   align-items: center;
   grid-template-columns: 1fr 1fr 1fr;
+  animation: fade-in 0.8s ease-in-out;
 }
 
 #restart-btn {
@@ -145,6 +152,7 @@ export default {
   align-items: center;
   justify-content: center;
   background: #4e4b4b;
+  flex-direction: column;
 }
 
 #cpu {
@@ -158,5 +166,14 @@ export default {
   width: 200px;
   background-color: #f5f5f5;
   color: #282828;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>

@@ -1,28 +1,55 @@
 <template>
   <div>
-    <form v-if="first_step">
+    <form v-if="step === 1">
       <h3>Select Algorithm</h3>
       <div class="input-field">
         <label for="algorithm-type">Select Algorithm </label>
+
+        <!-- Map out scheduling algorithms -->
         <select v-model="algorithm" class="algorithm-select">
           <option disabled value="">Please select one</option>
-          <option value="fcfs">First Come First Served</option>
-          <option value="priority_scheduling">Priority Scheduling</option>
-          <option value="round_robin">Round Robin</option>
-          <option value="shortest_job">Shortest Job First</option>
+          <option
+            v-for="(algorithm, index) in algorithms"
+            :key="index"
+            :value="{ text: algorithm.text, value: algorithm.value }"
+          >
+            {{ algorithm.text }}
+          </option>
         </select>
       </div>
       <div class="input-field">
         <label for="no-processes">Number of Processes </label>
         <input type="number" v-model="noProcesses" />
       </div>
-      <div class="input-field" v-if="algorithm === 'round_robin'">
+
+      <!-- Map out the process orders from comptued property -->
+      <div
+        class="input-field"
+        v-if="(algorithm.value === 'fcfs') & (noProcesses > 1)"
+      >
+        <label for="process-order">Process Order </label>
+        <select v-model="processOrder">
+          <option disabled value="">Please a process order</option>
+          <option
+            v-for="(combination, index) in processCombinations"
+            :key="index"
+            :value="combination.value"
+          >
+            {{ combination.text }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Display quantum time only if Round Robin is the algorithm -->
+      <div class="input-field" v-if="algorithm.value === 'round_robin'">
         <label for="no-processes">Quantum</label>
         <input type="number" v-model="quantum" />
       </div>
       <button type="button" @click="emitProcesses">Next Step</button>
     </form>
-    <form v-if="second_step">
+
+    <!-- Display the second page of the form -->
+    <form v-if="step === 2">
       <h3>Add burst times</h3>
       <div
         class="input-field"
@@ -32,19 +59,43 @@
         <label for="no-processes">Burst Time for P{{ burstTime }} </label>
         <input type="number" @input="burstTimeInputHandler(index, $event)" />
       </div>
-      <div class="input-field" v-if="algorithm === 'round_robin'">
-        <label for="no-processes">Quantum</label>
-        <input type="number" v-model="quantum" />
+      <div id="button_group">
+        <button type="button" @click="prevStep">Prev Step</button>
+        <button
+          v-if="algorithm.value === 'priority_scheduling'"
+          @click="nextStep"
+        >
+          Next Step
+        </button>
+        <button v-else type="button" @click="emitAnimation">
+          Start Animation
+        </button>
+      </div>
+    </form>
+
+    <!-- Display the third page of the form if priority scheduling and third step -->
+    <form v-if="(algorithm.value === 'priority_scheduling') & (step === 3)">
+      <h3>Add Process Priorities</h3>
+      <div
+        class="input-field"
+        v-for="(priority, index) in processes.length"
+        :key="index"
+      >
+        <label for="no-processes">Priority for for P{{ priority }} </label>
+        <input type="number" @input="priorityInputHandler(index, $event)" />
       </div>
       <div id="button_group">
         <button type="button" @click="prevStep">Prev Step</button>
-        <button type="button" @click="emitProcesses">Start Animation</button>
+        <button type="button" @click="emitAnimation">Start Animation</button>
       </div>
     </form>
   </div>
 </template>
 <script>
 import { Process } from "../../models/process";
+import { permutations } from "../../util/permutations";
+import { schedulingAlgorithms } from "../../util/constants";
+
 import {
   RoundRobin,
   SJF,
@@ -56,28 +107,68 @@ export default {
   name: "AlgorithmSelector",
   data() {
     return {
-      algorithm: null,
+      algorithm: {
+        text: null,
+        value: null,
+      },
+      algorithms: schedulingAlgorithms,
       processes: [],
       noProcesses: 0,
       quantum: 0,
-      first_step: true,
-      second_step: false,
+      step: 1,
       animation: {},
+      processOrder: [1, 2, 3], // Default in ascending order
     };
   },
 
+  computed: {
+    processCombinations() {
+      // Generate array with PIDs
+      const pidArray = [];
+      for (let i = 0; i < this.noProcesses; i++) {
+        pidArray.push(i + 1);
+      }
+
+      // Generate permutations of PIDS
+      const pidPermutations = permutations(pidArray);
+
+      // Push object representation and string representation to be stored in v-model
+      const processCombinations = [];
+      for (let permutation of pidPermutations) {
+        // Turns array to string i.e) [1,2,3] to "1,2,3"
+        let permStr = permutation.join(",");
+        processCombinations.push({ value: permutation, text: permStr });
+      }
+      return processCombinations;
+    },
+  },
   methods: {
     /**
-     * Sends over process data to display current processes
-     * then toggles next step in form
+     * Sends over process data and scheduling algorithm to parent
+     * to allow for data to be rendered then triggers next step in form
      */
     emitProcesses() {
       console.log("Emitting data");
+
+      // Initialize the processes
       this.generateProcesses();
       this.nextStep();
+
       console.log(this.noProcesses);
       console.log(this.processes);
-      this.$emit("select-processes", this.processes);
+
+      // Sends process and algorithm data to parent
+      this.$emit("select-processes", {
+        processes: this.processes,
+        algorithm: this.algorithm.text,
+      });
+    },
+
+    /**
+     * Sends all data required for the animation after
+     */
+    emitAnimation() {
+      this.$emit("animation-data", this.animation);
     },
 
     /**
@@ -110,8 +201,20 @@ export default {
       console.log(this.processes);
     },
 
+    priorityInputHandler(index, e) {
+      // Assign priorities to process
+      const inputTime = parseInt(e.target.value);
+      if (Number.isInteger(inputTime)) {
+        this.processes[index].priority = parseInt(inputTime);
+      } else {
+        this.processes[index].priority = 0;
+      }
+
+      console.log(this.processes);
+    },
+
     determineAnimation() {
-      switch (this.algorithm) {
+      switch (this.algorithm.value) {
         case "fcfs": {
           const fcfsAlgo = FCFS(this.processes);
           return fcfsAlgo.generateTimeline();
@@ -138,18 +241,16 @@ export default {
       }
     },
     nextStep() {
+      console.log(this.algorithm);
       if (this.noProcesses < 2) {
         // Alert that two or more processes should be entered
         console.log("More than 1 process should be entered");
       } else {
-        this.first_step = false;
-        this.second_step = true;
+        this.step += 1;
       }
     },
     prevStep() {
-      console.log;
-      this.first_step = true;
-      this.second_step = false;
+      this.step -= 1;
     },
   },
 };

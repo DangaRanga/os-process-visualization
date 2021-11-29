@@ -1,3 +1,0 @@
-function parseInput() {}
-
-function validateInput() {}
