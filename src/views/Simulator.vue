@@ -36,7 +36,7 @@
 <script>
 import AlgoritmSelector from "../components/AlgorithmSelector/AlgorithmSelector.vue";
 import Process from "../components/Process/Process.vue";
-import { PriorityScheduling } from "../controllers/processorAlgos";
+// import { PriorityScheduling } from "../controllers/processorAlgos";
 // import { SJF } from "../controllers/processorAlgos";
 // import { FCFS } from "../controllers/processorAlgos";
 
@@ -95,12 +95,12 @@ export default {
       // ];
       // const myqueue = new PriorityScheduling(processes);
       // myqueue.sortqueue((a, b) => a.priority - b.priority);
-      const myqueue = new PriorityScheduling(this.selectorData.processes);
+      /* const myqueue = new PriorityScheduling(this.selectorData.processes);
       console.log(myqueue);
       const testAnimationTimeline = myqueue.generateTimeline();
-      console.log(testAnimationTimeline);
+      console.log(testAnimationTimeline); */
       // Insert animation for each process
-      for (let animation of testAnimationTimeline) {
+      for (let animation of this.animation) {
         this.timeline.add(animation);
       }
 

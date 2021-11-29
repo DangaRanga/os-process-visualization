@@ -82,7 +82,7 @@
         :key="index"
       >
         <label for="no-processes">Priority for for P{{ priority }} </label>
-        <input type="number" @input="priorityInputHandle(index, $event)" />
+        <input type="number" @input="priorityInputHandler(index, $event)" />
       </div>
       <div id="button_group">
         <button type="button" @click="prevStep">Prev Step</button>
@@ -222,7 +222,9 @@ export default {
     priorityInputHandler(index, e) {
       // Assign priorities to process
       const inputTime = parseInt(e.target.value);
+      console.log("Setting priority");
       if (Number.isInteger(inputTime)) {
+        console.log("Priority set");
         this.processes[index].priority = parseInt(inputTime);
       } else {
         this.processes[index].priority = 0;
