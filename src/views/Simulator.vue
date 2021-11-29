@@ -1,8 +1,6 @@
 <template>
   <div id="container">
-    <h1 v-if="selectorData.algorithm">
-      Simulation for {{ selectorData.algorithm }} Algorithm
-    </h1>
+    <h1 v-if="algorithm">Simulation for {{ algorithm }} Algorithm</h1>
     <h1 v-else>Processor Scheduling Algorithm Simulator</h1>
     <main id="simulator">
       <!-- Respective sections for respective components -->
@@ -54,7 +52,7 @@ export default {
       duration: null,
       processes: 0,
       selectorData: {
-        algorithm: null,
+        algorithm: "",
         processes: [],
       },
       animation: [], // Animation emitted
@@ -118,6 +116,11 @@ export default {
       console.log("Processes: ", this.selectorData.processes);
     },
   },
+  computed: {
+    algorithm() {
+      return this.selectorData.algorithm;
+    },
+  },
 
   mounted() {
     // Anime.js timeline can only be initalized in created() or mounted() lifecycle method
@@ -143,7 +146,6 @@ export default {
   display: grid;
   align-items: center;
   grid-template-columns: 1fr 1fr 1fr;
-  animation: fade-in 0.8s ease-in-out;
 }
 
 #restart-btn {
@@ -202,15 +204,6 @@ export default {
 #box img {
   height: 80px;
   width: 80px;
-}
-
-@keyframes fade-in {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
 }
 
 @keyframes gradient {
