@@ -61,14 +61,34 @@
       </div>
       <div id="button_group">
         <button type="button" @click="prevStep">Prev Step</button>
-        <button type="button" @click="emitAnimation">Start Animation</button>
+        <button
+          v-if="algorithm.value === 'priority_scheduling'"
+          @click="nextStep"
+        >
+          Next Step
+        </button>
+        <button v-else type="button" @click="emitAnimation">
+          Start Animation
+        </button>
       </div>
     </form>
 
     <!-- Display the third page of the form if priority scheduling and third step -->
-    <form
-      v-if="(algorithm.value === 'priority_scheduling') & (step === 3)"
-    ></form>
+    <form v-if="(algorithm.value === 'priority_scheduling') & (step === 3)">
+      <h3>Add Process Priorities</h3>
+      <div
+        class="input-field"
+        v-for="(priority, index) in processes.length"
+        :key="index"
+      >
+        <label for="no-processes">Priority for for P{{ priority }} </label>
+        <input type="number" @input="priorityInputHandler(index, $event)" />
+      </div>
+      <div id="button_group">
+        <button type="button" @click="prevStep">Prev Step</button>
+        <button type="button" @click="emitAnimation">Start Animation</button>
+      </div>
+    </form>
   </div>
 </template>
 <script>
@@ -181,8 +201,20 @@ export default {
       console.log(this.processes);
     },
 
+    priorityInputHandler(index, e) {
+      // Assign priorities to process
+      const inputTime = parseInt(e.target.value);
+      if (Number.isInteger(inputTime)) {
+        this.processes[index].priority = parseInt(inputTime);
+      } else {
+        this.processes[index].priority = 0;
+      }
+
+      console.log(this.processes);
+    },
+
     determineAnimation() {
-      switch (this.algorithm) {
+      switch (this.algorithm.value) {
         case "fcfs": {
           const fcfsAlgo = FCFS(this.processes);
           return fcfsAlgo.generateTimeline();
