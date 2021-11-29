@@ -277,7 +277,7 @@ export class RoundRobin extends ProcessorSchedulingAlgorithm {
     let update = this.assessQueue();
     tmline = tmline.concat(update);
 
-    while (iteration != 4) {
+    while (iteration != 10) {
       // while (this.queue.length != 0) {
       let element = this.dequeue();
       let name = ".p" + String(element.pid);

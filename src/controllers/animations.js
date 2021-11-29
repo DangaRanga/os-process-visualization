@@ -20,6 +20,7 @@ export function enterProc(target, duration = 1500, X = 800, scale = 0.8) {
 export function inProc(target, time = 1) {
   return {
     targets: target + " #proces-body",
+    direction: "alternate",
     rotate: {
       value: 360 * time,
       duration: 1000 * time,
