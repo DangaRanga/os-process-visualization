@@ -6,12 +6,16 @@
 
     <div id="routes">
       <router-link to="/">Simulator</router-link>
-      <router-link to="/fcfs">FCFS Algorithm</router-link>
-      <router-link to="/round-robin">Round Robin</router-link>
+      <router-link to="/info/fcfs">FCFS Algorithm</router-link>
+      <router-link to="/info/round_robin">Round Robin</router-link>
 
-      <router-link to="/priority-scheduling">Priority Scheduling</router-link>
+      <router-link to="/info/priority_scheduling"
+        >Priority Scheduling</router-link
+      >
 
-      <router-link to="/shortest-job-first">Shortest Job First</router-link>
+      <router-link to="/info/shortest_job_first"
+        >Shortest Job First</router-link
+      >
     </div>
   </nav>
 </template>

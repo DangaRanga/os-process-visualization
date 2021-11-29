@@ -173,6 +173,8 @@ export default {
     #86be43 0%,
     rgba(134, 190, 67, 0.4) 100%
   );
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
   border: 1px solid #86be43;
   box-sizing: border-box;
   border-radius: 5px;
@@ -190,6 +192,18 @@ export default {
   }
   100% {
     opacity: 1;
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 </style>
