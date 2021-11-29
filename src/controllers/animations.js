@@ -13,6 +13,7 @@ export function enterProc(target, duration = 1500, X = 800, scale = 0.8) {
     duration: duration,
     translateX: X,
     scale: scale,
+    easing: "linear",
   };
 }
 
@@ -53,5 +54,27 @@ export function shiftinQueue(target, duration = 1500, Y = 120) {
     duration: duration,
     translateY: Y,
     easing: "easeInQuad",
+  };
+}
+
+export function changeState(target) {
+  return {
+    targets: target + " #proces-body",
+    background: {
+      value: "#df4f4f",
+      easing: "linear",
+    },
+    scale: 1.2,
+    duration: 500,
+  };
+}
+
+export function renterQueue(target, duration = 1500, X = 0, Y = 120) {
+  return {
+    targets: target,
+    duration: duration,
+    translateX: X,
+    translateY: Y,
+    easing: "linear",
   };
 }
