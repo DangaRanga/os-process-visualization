@@ -20,7 +20,6 @@ export function enterProc(target, duration = 1500, X = 800, scale = 0.8) {
 export function inProc(target, time = 1) {
   return {
     targets: target + " #proces-body",
-    direction: "alternate",
     rotate: {
       value: 360 * time,
       duration: 1000 * time,
@@ -57,18 +56,19 @@ export function shiftinQueue(target, duration = 1500, Y = 120) {
   };
 }
 
-export function changeState(target, duration = 500) {
+export function changeState(target) {
   return {
-    target: target + " #proces-body",
+    targets: target + " #proces-body",
     background: {
       value: "#df4f4f",
-      duration: duration,
       easing: "linear",
     },
+    scale: 1.2,
+    duration: 500,
   };
 }
 
-export function renterQueue(target, duration = 1500, X = 120, Y = 120) {
+export function renterQueue(target, duration = 1500, X = 0, Y = 120) {
   return {
     targets: target,
     duration: duration,

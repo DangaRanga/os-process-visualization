@@ -166,8 +166,8 @@ export default {
 
       this.nextStep();
 
-      console.log(this.noProcesses);
-      console.log(this.processes);
+      // console.log(this.noProcesses);
+      // console.log(this.processes);
 
       // Sends process and algorithm data to parent
       this.$emit("select-processes", {
