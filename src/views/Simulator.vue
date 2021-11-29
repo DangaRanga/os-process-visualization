@@ -21,7 +21,7 @@
         ></process>
       </section>
       <section id="cpu">
-        <h3>CPU</h3>
+        <h3>Processor</h3>
         <div id="box"><img src="@/assets/Logo(1).svg" /></div>
       </section>
     </main>
