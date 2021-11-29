@@ -151,7 +151,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #4e4b4b;
   flex-direction: column;
 }
 

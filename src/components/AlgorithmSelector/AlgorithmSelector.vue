@@ -82,7 +82,7 @@
         :key="index"
       >
         <label for="no-processes">Priority for for P{{ priority }} </label>
-        <input type="number" @input="priorityInputHandler(index, $event)" />
+        <input type="number" @input="priorityInputHandle(index, $event)" />
       </div>
       <div id="button_group">
         <button type="button" @click="prevStep">Prev Step</button>
