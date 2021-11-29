@@ -1,12 +1,12 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import Simulator from "../views/Simulator.vue";
+//import Simulator from "@/views/Simulator.vue";
 import AlgorithmDetails from "@/views/AlgorithmDetails";
 
 const routes = [
   {
     path: "/",
     name: "Simulator",
-    component: Simulator,
+    component: () => import("@/views/Simulator.vue"),
   },
   {
     path: "/about",
