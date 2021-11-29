@@ -25,11 +25,11 @@
       </section>
       <section id="cpu">
         <h3>Processor</h3>
-        <div id="box"><img src="@/assets/Logo(1).svg" /></div>
+        <div id="box"><img src="../assets/Logo(1).svg" /></div>
       </section>
     </main>
     <button @click="animateProcesses()" id="restart-btn">
-      Restart Simulation
+      Start Simulation
     </button>
   </div>
 </template>
@@ -55,6 +55,7 @@ export default {
         algorithm: null,
         processes: [],
       },
+      animation: [], // Animation emitted
       animationCompleted: false,
     };
   },
@@ -72,7 +73,6 @@ export default {
         this.timeline.restart();
         this.animationCompleted = false;
       }
-
       for (let animation of this.animation) {
         this.timeline.add(animation);
       }
@@ -94,6 +94,7 @@ export default {
 
   mounted() {
     // Anime.js timeline can only be initalized in created() or mounted() lifecycle method
+    this.algoSelection();
     this.timeline = anime.timeline({
       easing: "easeOutExpo",
       // Represents total burst time. Individual times can be subdivisions of this value

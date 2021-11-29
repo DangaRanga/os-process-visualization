@@ -1,9 +1,7 @@
 <template>
   <div id="container">
     <navbar />
-    <transition name="slide-fade">
-      <router-view />
-    </transition>
+    <router-view />
   </div>
 </template>
 
