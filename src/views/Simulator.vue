@@ -146,7 +146,6 @@ export default {
   display: grid;
   align-items: center;
   grid-template-columns: 1fr 1fr 1fr;
-  animation: fade-in 0.8s ease-in-out;
 }
 
 #restart-btn {
@@ -205,15 +204,6 @@ export default {
 #box img {
   height: 80px;
   width: 80px;
-}
-
-@keyframes fade-in {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
 }
 
 @keyframes gradient {
