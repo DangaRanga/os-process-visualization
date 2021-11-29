@@ -68,7 +68,7 @@
           Next Step
         </button>
         <button v-else type="button" @click="emitAnimation">
-          Start Animation
+          Create Animation
         </button>
       </div>
     </form>
@@ -86,7 +86,7 @@
       </div>
       <div id="button_group">
         <button type="button" @click="prevStep">Prev Step</button>
-        <button type="button" @click="emitAnimation">Start Animation</button>
+        <button type="button" @click="emitAnimation">Create Animation</button>
       </div>
     </form>
   </div>
@@ -95,15 +95,16 @@
 import { Process } from "../../models/process";
 import { permutations } from "../../util/permutations";
 import { schedulingAlgorithms } from "../../util/constants";
-import { dangerNotification } from "../../util/notifications";
-
+import {
+  dangerNotification,
+  successNotification,
+} from "../../util/notifications";
 import {
   RoundRobin,
   SJF,
   FCFS,
   PriorityScheduling,
 } from "../../controllers/processorAlgos";
-
 export default {
   name: "AlgorithmSelector",
   data() {
@@ -117,11 +118,10 @@ export default {
       noProcesses: 0,
       quantum: 0,
       step: 1,
-      animation: {},
+      animation: [],
       processOrder: [1, 2, 3], // Default in ascending order
     };
   },
-
   computed: {
     processCombinations() {
       // Generate array with PIDs
@@ -129,10 +129,8 @@ export default {
       for (let i = 0; i < this.noProcesses; i++) {
         pidArray.push(i + 1);
       }
-
       // Generate permutations of PIDS
       const pidPermutations = permutations(pidArray);
-
       // Push object representation and string representation to be stored in v-model
       const processCombinations = [];
       for (let permutation of pidPermutations) {
@@ -150,7 +148,6 @@ export default {
      */
     emitProcesses() {
       console.log("Emitting data");
-
       if (!this.algorithm.text) {
         dangerNotification("Please select an algorithm");
         return;
@@ -160,12 +157,9 @@ export default {
       if (generationResult !== true) {
         return;
       }
-
       this.nextStep();
-
-      console.log(this.noProcesses);
-      console.log(this.processes);
-
+      // console.log(this.noProcesses);
+      // console.log(this.processes);
       // Sends process and algorithm data to parent
       this.$emit("select-processes", {
         processes: this.processes,
@@ -173,33 +167,32 @@ export default {
         processOrder: this.processOrder,
       });
     },
-
     /**
      * Sends all data required for the animation after
      */
     emitAnimation() {
+      this.determineAnimation();
+      successNotification(
+        "Animation Created, Begin simulation by clicking 'Start Simulation'"
+      );
       this.$emit("animation-data", this.animation);
     },
-
     /**
      * Initializes all processes
      */
     generateProcesses() {
       this.processes = [];
-
       // Prevents more than 5 processes from being added
       if (this.noProcesses > 5) {
         dangerNotification("No more than 5 processes can be selected");
         return false;
       }
-
       for (let i = 0; i < this.noProcesses; i++) {
         // Initialize all burst times as 0
         this.processes.push(new Process(i + 1, 0, 0));
       }
       return true;
     },
-
     burstTimeInputHandler(index, e) {
       // Assign burst time to process
       const inputTime = parseInt(e.target.value);
@@ -208,44 +201,42 @@ export default {
       } else {
         this.processes[index].burstTime = 0;
       }
-
       console.log(this.processes);
     },
-
     priorityInputHandler(index, e) {
       // Assign priorities to process
       const inputTime = parseInt(e.target.value);
+      console.log("Setting priority");
       if (Number.isInteger(inputTime)) {
+        console.log("Priority set");
         this.processes[index].priority = parseInt(inputTime);
       } else {
         this.processes[index].priority = 0;
       }
-
       console.log(this.processes);
     },
-
     determineAnimation() {
       switch (this.algorithm.value) {
         case "fcfs": {
-          const fcfsAlgo = FCFS(this.processes);
-          return fcfsAlgo.generateTimeline();
+          const fcfsAlgo = new FCFS(this.processes);
+          this.animation = fcfsAlgo.generateTimeline();
+          break;
         }
-
         case "round_robin": {
-          const roundRobinAlgo = RoundRobin(this.processes, this.quantum);
-          return roundRobinAlgo.generateTimeline();
+          const roundRobinAlgo = new RoundRobin(this.processes, this.quantum);
+          this.animation = roundRobinAlgo.generateTimeline();
+          break;
         }
-
-        case "priority": {
-          const prioritySchedulAlgo = PriorityScheduling(this.processes);
-          return prioritySchedulAlgo.generateTimeline();
+        case "priority_scheduling": {
+          const prioritySchedulAlgo = new PriorityScheduling(this.processes);
+          this.animation = prioritySchedulAlgo.generateTimeline();
+          break;
         }
-
         case "shortest_job": {
-          const shortestJobAlgo = SJF(this.processes);
-          return shortestJobAlgo.generateTimeline();
+          const shortestJobAlgo = new SJF(this.processes);
+          this.animation = shortestJobAlgo.generateTimeline();
+          break;
         }
-
         default:
           // Alert that algorithm wasn't selected
           console.log("Select an algorithm in step");
@@ -277,7 +268,6 @@ form {
   margin: 0 5%;
   border-radius: 10px;
 }
-
 button {
   background: #86be43;
   padding: 10px 25px;
@@ -289,31 +279,26 @@ button {
   outline: none;
   margin: 20;
 }
-
 #button_group {
   display: flex;
   align-items: center;
   justify-content: space-around;
   width: 90%;
 }
-
 button:hover {
   background: #4a632b;
   cursor: pointer;
 }
-
 h3 {
   margin: 2% 0;
 }
 .input-field {
   margin: 5% 0;
-
   display: flex;
   flex-direction: column;
   text-align: left;
   width: 80%;
 }
-
 label {
   font-size: 0.8em;
   color: #a7a7a7;
@@ -327,14 +312,12 @@ input {
   color: #ffff;
   border-radius: 5px;
 }
-
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
