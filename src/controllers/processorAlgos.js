@@ -138,7 +138,7 @@ export class SJF extends ProcessorSchedulingAlgorithm {
     this.queuesort();
     let queueing = [];
 
-    const shift = 95;
+    const shift = 80;
 
     for (let i = 0; i < this.queue.length; i++) {
       let element = this.processes[i];
@@ -168,7 +168,7 @@ export class SJF extends ProcessorSchedulingAlgorithm {
   generateTimeline() {
     var tmline = [];
     var iteration = 1;
-    const distanceTOCPU = 350,
+    const distanceTOCPU = 450,
       shift = 95;
 
     let update = this.assessQueue();
@@ -179,14 +179,7 @@ export class SJF extends ProcessorSchedulingAlgorithm {
       let name = ".p" + String(element.pid);
       let prev = this.relativeposition[element.pid];
       let minitl = [];
-      minitl.push(
-        enterProc(
-          name,
-          1500,
-          distanceTOCPU + (iteration - 1) * shift + prev,
-          0.8
-        )
-      );
+      minitl.push(enterProc(name, 1500, distanceTOCPU, 0.8));
       for (let i = this.queue.length - 1; i > -1; i--) {
         minitl.push(
           shiftinQueue(

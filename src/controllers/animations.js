@@ -1,8 +1,8 @@
-export function shuffle(target, duration = 1500, X = 800, offset = "0") {
+export function shuffle(target, duration = 1500, Y = 800, offset = "0") {
   return {
     targets: target,
     duration: duration,
-    translateX: X,
+    translateY: Y,
     offset: offset,
   };
 }
@@ -47,11 +47,11 @@ export function leaveProcDisperse(target, duration = 1500) {
   };
 }
 
-export function shiftinQueue(target, duration = 1500, X = 120) {
+export function shiftinQueue(target, duration = 1500, Y = 120) {
   return {
     targets: target,
     duration: duration,
-    translateX: X,
+    translateY: Y,
     easing: "easeInQuad",
   };
 }
