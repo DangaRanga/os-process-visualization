@@ -428,6 +428,7 @@ export class PriorityScheduling extends ProcessorSchedulingAlgorithm {
       iteration++;
     }
 
+    console.log("Timeline is", tmline);
     return tmline;
   }
 }

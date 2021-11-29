@@ -247,7 +247,7 @@ export default {
           break;
         }
 
-        case "priority": {
+        case "priority_scheduling": {
           const prioritySchedulAlgo = new PriorityScheduling(this.processes);
           this.animation = prioritySchedulAlgo.generateTimeline();
           break;
