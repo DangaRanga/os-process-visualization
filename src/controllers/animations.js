@@ -1,8 +1,9 @@
-export function shuffle(target, duration = 1500, X = 800) {
+export function shuffle(target, duration = 1500, X = 800, offset = "0") {
   return {
     targets: target,
     duration: duration,
     translateX: X,
+    offset: offset,
   };
 }
 

@@ -154,7 +154,9 @@ export class SJF extends ProcessorSchedulingAlgorithm {
         b = this.sortedposition[i],
         movement = (b - a) * shift;
       if (movement != 0) {
-        queueing.push(shuffle(".p" + i, 1500, movement));
+        i != "1"
+          ? queueing.push(shuffle(".p" + i, 1500, movement, "-=50"))
+          : queueing.push(shuffle(".p" + i, 1500, movement));
       }
       this.relativeposition[i] = movement;
     }
