@@ -25,7 +25,6 @@ div {
   display: flex;
   align-items: center;
   justify-content: center;
-
   background: #df4f4f;
 }
 
