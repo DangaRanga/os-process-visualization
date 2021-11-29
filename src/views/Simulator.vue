@@ -4,7 +4,6 @@
       Simulation for {{ selectorData.algorithm }} Algorithm
     </h1>
     <h1 v-else>Processor Scheduling Algorithm Simulator</h1>
-    <h4>No Processes: {{ this.selectorData.processes.length }}</h4>
     <main id="simulator">
       <!-- Respective sections for respective components -->
       <section id="algorithm-selection">
@@ -21,7 +20,10 @@
           :burstTime="process.burstTime"
         ></process>
       </section>
-      <section id="cpu"><div id="box">CPU</div></section>
+      <section id="cpu">
+        <h3>CPU</h3>
+        <div id="box"><img src="@/assets/Logo(1).svg" /></div>
+      </section>
     </main>
     <button @click="animateProcesses()" id="restart-btn">
       Restart Simulation
@@ -66,25 +68,23 @@ export default {
         this.animationCompleted = false;
       }
 
-      // const processes = [
-      //   {
-      //     pid: 1,
-      //     burstTime: 5,
-      //     // priority: 2,
-      //   },
-      //   {
-      //     pid: 2,
-      //     burstTime: 4,
-      //     // priority: 1,
-      //   },
-      //   {
-      //     pid: 3,
-      //     burstTime: 3,
-      //     // priority: 4,
-      //   },
-      // ];
-      const processes = this.selectorData;
-      console.log(processes);
+      const processes = [
+        {
+          pid: 1,
+          burstTime: 2,
+          arrival: 2,
+        },
+        {
+          pid: 2,
+          burstTime: 5,
+          arrival: 3,
+        },
+        {
+          pid: 3,
+          burstTime: 3,
+          arrival: 1,
+        },
+      ];
       // const myqueue = new PriorityScheduling(processes);
       // myqueue.sortqueue((a, b) => a.priority - b.priority);
       const myqueue = new FCFS(processes);
@@ -152,19 +152,39 @@ export default {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  gap: 10px;
 }
 
 #cpu {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 
+#cpu h3 {
+  margin-bottom: 15px;
+}
 #box {
-  height: 150px;
-  width: 200px;
-  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 250px;
+  width: 150px;
+  background: radial-gradient(
+    100% 100% at 0% 0%,
+    #86be43 0%,
+    rgba(134, 190, 67, 0.4) 100%
+  );
+  border: 1px solid #86be43;
+  box-sizing: border-box;
+  border-radius: 5px;
   color: #282828;
+}
+
+#box img {
+  height: 80px;
+  width: 80px;
 }
 
 @keyframes fade-in {
