@@ -99,14 +99,12 @@ import {
   dangerNotification,
   successNotification,
 } from "../../util/notifications";
-
 import {
   RoundRobin,
   SJF,
   FCFS,
   PriorityScheduling,
 } from "../../controllers/processorAlgos";
-
 export default {
   name: "AlgorithmSelector",
   data() {
@@ -124,7 +122,6 @@ export default {
       processOrder: [1, 2, 3], // Default in ascending order
     };
   },
-
   computed: {
     processCombinations() {
       // Generate array with PIDs
@@ -132,10 +129,8 @@ export default {
       for (let i = 0; i < this.noProcesses; i++) {
         pidArray.push(i + 1);
       }
-
       // Generate permutations of PIDS
       const pidPermutations = permutations(pidArray);
-
       // Push object representation and string representation to be stored in v-model
       const processCombinations = [];
       for (let permutation of pidPermutations) {
@@ -153,7 +148,6 @@ export default {
      */
     emitProcesses() {
       console.log("Emitting data");
-
       if (!this.algorithm.text) {
         dangerNotification("Please select an algorithm");
         return;
@@ -163,12 +157,9 @@ export default {
       if (generationResult !== true) {
         return;
       }
-
       this.nextStep();
-
       // console.log(this.noProcesses);
       // console.log(this.processes);
-
       // Sends process and algorithm data to parent
       this.$emit("select-processes", {
         processes: this.processes,
@@ -176,7 +167,6 @@ export default {
         processOrder: this.processOrder,
       });
     },
-
     /**
      * Sends all data required for the animation after
      */
@@ -187,26 +177,22 @@ export default {
       );
       this.$emit("animation-data", this.animation);
     },
-
     /**
      * Initializes all processes
      */
     generateProcesses() {
       this.processes = [];
-
       // Prevents more than 5 processes from being added
       if (this.noProcesses > 5) {
         dangerNotification("No more than 5 processes can be selected");
         return false;
       }
-
       for (let i = 0; i < this.noProcesses; i++) {
         // Initialize all burst times as 0
         this.processes.push(new Process(i + 1, 0, 0));
       }
       return true;
     },
-
     burstTimeInputHandler(index, e) {
       // Assign burst time to process
       const inputTime = parseInt(e.target.value);
@@ -215,10 +201,8 @@ export default {
       } else {
         this.processes[index].burstTime = 0;
       }
-
       console.log(this.processes);
     },
-
     priorityInputHandler(index, e) {
       // Assign priorities to process
       const inputTime = parseInt(e.target.value);
@@ -229,10 +213,8 @@ export default {
       } else {
         this.processes[index].priority = 0;
       }
-
       console.log(this.processes);
     },
-
     determineAnimation() {
       switch (this.algorithm.value) {
         case "fcfs": {
@@ -240,25 +222,21 @@ export default {
           this.animation = fcfsAlgo.generateTimeline();
           break;
         }
-
         case "round_robin": {
           const roundRobinAlgo = new RoundRobin(this.processes, this.quantum);
           this.animation = roundRobinAlgo.generateTimeline();
           break;
         }
-
         case "priority_scheduling": {
           const prioritySchedulAlgo = new PriorityScheduling(this.processes);
           this.animation = prioritySchedulAlgo.generateTimeline();
           break;
         }
-
         case "shortest_job": {
           const shortestJobAlgo = new SJF(this.processes);
           this.animation = shortestJobAlgo.generateTimeline();
           break;
         }
-
         default:
           // Alert that algorithm wasn't selected
           console.log("Select an algorithm in step");
@@ -290,7 +268,6 @@ form {
   margin: 0 5%;
   border-radius: 10px;
 }
-
 button {
   background: #86be43;
   padding: 10px 25px;
@@ -302,31 +279,26 @@ button {
   outline: none;
   margin: 20;
 }
-
 #button_group {
   display: flex;
   align-items: center;
   justify-content: space-around;
   width: 90%;
 }
-
 button:hover {
   background: #4a632b;
   cursor: pointer;
 }
-
 h3 {
   margin: 2% 0;
 }
 .input-field {
   margin: 5% 0;
-
   display: flex;
   flex-direction: column;
   text-align: left;
   width: 80%;
 }
-
 label {
   font-size: 0.8em;
   color: #a7a7a7;
@@ -340,14 +312,12 @@ input {
   color: #ffff;
   border-radius: 5px;
 }
-
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
