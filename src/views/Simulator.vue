@@ -67,27 +67,28 @@ export default {
         this.timeline.restart();
         this.animationCompleted = false;
       }
-
-      const processes = [
-        {
-          pid: 1,
-          burstTime: 2,
-          arrival: 2,
-        },
-        {
-          pid: 2,
-          burstTime: 5,
-          arrival: 3,
-        },
-        {
-          pid: 3,
-          burstTime: 3,
-          arrival: 1,
-        },
-      ];
+      console.log("This is the data: ", this.selectorData.processes);
+      // const processes = [
+      //   {
+      //     pid: 1,
+      //     burstTime: 2,
+      //     arrival: 2,
+      //   },
+      //   {
+      //     pid: 2,
+      //     burstTime: 5,
+      //     arrival: 3,
+      //   },
+      //   {
+      //     pid: 3,
+      //     burstTime: 3,
+      //     arrival: 1,
+      //   },
+      // ];
       // const myqueue = new PriorityScheduling(processes);
       // myqueue.sortqueue((a, b) => a.priority - b.priority);
-      const myqueue = new FCFS(processes);
+      const myqueue = new FCFS(this.selectorData.processes);
+      console.log(myqueue);
       const testAnimationTimeline = myqueue.generateTimeline();
       console.log(testAnimationTimeline);
       // Insert animation for each process
