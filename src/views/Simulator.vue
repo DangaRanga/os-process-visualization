@@ -36,8 +36,9 @@
 <script>
 import AlgoritmSelector from "../components/AlgorithmSelector/AlgorithmSelector.vue";
 import Process from "../components/Process/Process.vue";
-// import { PriorityScheduling } from "../controllers/processorAlgos";
-import { SJF } from "../controllers/processorAlgos";
+import { PriorityScheduling } from "../controllers/processorAlgos";
+// import { SJF } from "../controllers/processorAlgos";
+// import { FCFS } from "../controllers/processorAlgos";
 
 import anime from "animejs";
 
@@ -74,28 +75,30 @@ export default {
         this.timeline.restart();
         this.animationCompleted = false;
       }
-
-      const processes = [
-        {
-          pid: 1,
-          burstTime: 2,
-          arrival: 2,
-        },
-        {
-          pid: 2,
-          burstTime: 5,
-          arrival: 3,
-        },
-        {
-          pid: 3,
-          burstTime: 3,
-          arrival: 1,
-        },
-      ];
+      console.log("This is the data: ", this.selectorData.processes);
+      // const processes = [
+      //   {
+      //     pid: 1,
+      //     burstTime: 2,
+      //     arrival: 2,
+      //   },
+      //   {
+      //     pid: 2,
+      //     burstTime: 5,
+      //     arrival: 3,
+      //   },
+      //   {
+      //     pid: 3,
+      //     burstTime: 3,
+      //     arrival: 1,
+      //   },
+      // ];
       // const myqueue = new PriorityScheduling(processes);
       // myqueue.sortqueue((a, b) => a.priority - b.priority);
-      const myqueue = new SJF(processes);
+      const myqueue = new PriorityScheduling(this.selectorData.processes);
+      console.log(myqueue);
       const testAnimationTimeline = myqueue.generateTimeline();
+      console.log(testAnimationTimeline);
       // Insert animation for each process
       for (let animation of testAnimationTimeline) {
         this.timeline.add(animation);
@@ -118,6 +121,7 @@ export default {
 
   mounted() {
     // Anime.js timeline can only be initalized in created() or mounted() lifecycle method
+    this.algoSelection();
     this.timeline = anime.timeline({
       easing: "easeOutExpo",
       // Represents total burst time. Individual times can be subdivisions of this value
