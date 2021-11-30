@@ -28,7 +28,10 @@
         <div id="box"><img src="../assets/Logo(1).svg" /></div>
       </section>
     </main>
-    <button @click="animateProcesses()" id="restart-btn">
+    <a href="/" v-if="restart" @click="reloadPage" id="restart-btn">
+      Restart Simulation
+    </a>
+    <button v-else @click="animateProcesses()" id="start-btn">
       Start Simulation
     </button>
   </div>
@@ -37,6 +40,8 @@
 import AlgoritmSelector from "../components/AlgorithmSelector/AlgorithmSelector.vue";
 import Process from "../components/Process/Process.vue";
 // import { PriorityScheduling } from "../controllers/processorAlgos";
+
+import { dangerNotification } from "../util/notifications";
 
 import anime from "animejs";
 
@@ -58,6 +63,7 @@ export default {
       },
       animation: [], // Animation emitted
       animationCompleted: false,
+      restart: false,
     };
   },
   methods: {
@@ -65,10 +71,17 @@ export default {
      * Main method for driving animation
      */
     animateProcesses() {
+      // Toggle restart button to be active when animation is started
       // If timeline is empty don't animate
       if (this.animation.length === 0) {
+        dangerNotification(
+          "Please set simulation parameters and click create animation"
+        );
         return;
       }
+
+      this.restart = true;
+
       // Each process algo will have a different animation stored in animations.js
       if (this.animationCompleted === true) {
         this.timeline.restart();
@@ -92,7 +105,9 @@ export default {
       console.log("Processes: ", this.selectorData.processes);
     },
   },
-
+  reloadPage() {
+    window.location.reload();
+  },
   mounted() {
     // Anime.js timeline can only be initalized in created() or mounted() lifecycle method
     this.timeline = anime.timeline({
@@ -119,7 +134,7 @@ export default {
   animation: fade-in 0.8s ease-in-out;
 }
 
-#restart-btn {
+#start-btn {
   background: #86be43;
   padding: 20px 30px;
   border: none;
@@ -128,13 +143,27 @@ export default {
   border-radius: 5px;
   transition: all 0.3s ease-in-out;
   outline: none;
+  animation: fade-in 0.8s ease-in-out;
 }
 
-#restart-btn:hover {
+#start-btn:hover,
+a:hover {
   background: #4a632b;
   cursor: pointer;
 }
 
+a {
+  font-size: 0.8em;
+  background: #86be43;
+  padding: 20px 30px;
+  border: none;
+  color: #ffff;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+  outline: none;
+  animation: fade-in 0.8s ease-in-out;
+}
 #processes {
   display: flex;
   align-items: center;
@@ -148,6 +177,7 @@ export default {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  height: 100%;
 }
 
 #cpu h3 {
@@ -170,6 +200,7 @@ export default {
   box-sizing: border-box;
   border-radius: 5px;
   color: #282828;
+  height: 100%;
 }
 
 #box img {
