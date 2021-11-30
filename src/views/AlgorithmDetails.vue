@@ -11,11 +11,19 @@
     <div class="reasons">
       <div id="advantages">
         <h2>Advantages</h2>
-        <p>{{ details.pros }}</p>
+        <ol>
+          <li v-for="(detail, index) in details.pros" :key="index">
+            {{ detail }}
+          </li>
+        </ol>
       </div>
       <div id="disadvantages">
         <h2>Disadvantages</h2>
-        <p>{{ details.cons }}</p>
+        <ol>
+          <li v-for="(detail, index) in details.cons" :key="index">
+            {{ detail }}
+          </li>
+        </ol>
       </div>
     </div>
   </div>
@@ -63,13 +71,19 @@ export default {
   margin: 8% 0;
 }
 
-p {
+p,
+li {
   width: 80%;
 }
 
-p {
+p,
+li {
   line-height: 1.7em;
   font-size: 0.9em;
   color: #d0d0d0;
+}
+
+li {
+  margin: 2% 2.5%;
 }
 </style>
