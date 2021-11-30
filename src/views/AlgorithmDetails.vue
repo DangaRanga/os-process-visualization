@@ -5,7 +5,7 @@
       <h2>How it Works</h2>
       <div id="content">
         <p>{{ details.description }}</p>
-        <div id="process-gif"></div>
+        <div id="process-gif"><img :src="details.gif" /></div>
       </div>
     </div>
     <div class="reasons">
