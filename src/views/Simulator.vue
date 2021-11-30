@@ -39,8 +39,6 @@
 <script>
 import AlgoritmSelector from "../components/AlgorithmSelector/AlgorithmSelector.vue";
 import Process from "../components/Process/Process.vue";
-// import { PriorityScheduling } from "../controllers/processorAlgos";
-
 import { dangerNotification } from "../util/notifications";
 
 import anime from "animejs";

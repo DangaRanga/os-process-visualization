@@ -219,8 +219,9 @@ export class SJF extends ProcessorSchedulingAlgorithm {
  * Class for the Round Robin algorithm
  */
 export class RoundRobin extends ProcessorSchedulingAlgorithm {
-  constructor(processes) {
+  constructor(processes, quantum) {
     super(processes);
+    this.quantum = quantum;
     this.queue = this.processes.slice();
     this.currentposition = {};
     this.sortedposition = {};
@@ -236,13 +237,7 @@ export class RoundRobin extends ProcessorSchedulingAlgorithm {
     this.queue.unshift(element);
   }
 
-  assessQueue() {
-    this.sortqueue(this.queue, (a, b) => b.pid - a.pid);
-
-    let queueing = [];
-
-    const shift = 90;
-
+  updatePositioninQueue(shift, array = null) {
     for (let i = 0; i < this.queue.length; i++) {
       let element = this.processes[i];
       this.currentposition[String(element.pid)] = i;
@@ -253,36 +248,48 @@ export class RoundRobin extends ProcessorSchedulingAlgorithm {
       }
     }
 
-    for (let i of Object.keys(this.currentposition)) {
-      let a = this.currentposition[i],
-        b = this.sortedposition[i],
-        movement = (b - a) * shift;
-      if (movement != 0) {
-        i != "1"
-          ? queueing.push(shuffle(".p" + i, 1500, movement, "-=50"))
-          : queueing.push(shuffle(".p" + i, 1500, movement));
+    if (array != null) {
+      for (let i of Object.keys(this.currentposition)) {
+        let a = this.currentposition[i],
+          b = this.sortedposition[i],
+          movement = (b - a) * shift;
+        if (movement != 0) {
+          i != "1"
+            ? array.push(shuffle(".p" + i, 1500, movement, "-=50"))
+            : array.push(shuffle(".p" + i, 1500, movement));
+        }
+        this.relativeposition[i] = movement;
       }
-      this.relativeposition[i] = movement;
     }
+  }
+
+  assessQueue() {
+    this.sortqueue(this.queue, (a, b) => b.pid - a.pid);
+
+    let queueing = [];
+
+    const shift = 90;
+
+    this.updatePositioninQueue(shift, queueing);
 
     return queueing;
   }
 
   generateTimeline() {
     var tmline = [];
-    var iteration = 1;
     const distanceTOCPU = 450,
       shift = 90;
 
     let update = this.assessQueue();
     tmline = tmline.concat(update);
 
-    while (iteration != 10) {
-      // while (this.queue.length != 0) {
+    while (this.queue.length != 0) {
       let element = this.dequeue();
       let name = ".p" + String(element.pid);
       let minitl = [];
+      let diff = this.processes.length - (this.queue.length + 1);
       minitl.push(enterProc(name, 2000, distanceTOCPU, 0.8));
+
       for (let i = this.queue.length - 1; i > -1; i--) {
         this.relativeposition[this.queue[i].pid] =
           this.relativeposition[this.queue[i].pid] + shift;
@@ -291,19 +298,36 @@ export class RoundRobin extends ProcessorSchedulingAlgorithm {
           shiftinQueue(".p" + String(this.queue[i].pid), 500, movement)
         );
       }
-      console.log(this.relativeposition);
-      minitl.push(inProc(name, element.burstTime));
-      // minitl.push(leaveProcDisperse(name));
-      minitl.push(changeState(name));
-      this.enqueue(element);
-      let move = (0 - this.currentposition[element.pid]) * shift;
-      this.relativeposition[element.pid] = move;
-      minitl.push(renterQueue(name, 1500, 0, move));
-      tmline = tmline.concat(minitl);
-      iteration++;
-    }
 
-    console.log(tmline);
+      let time;
+      if (this.queue.length == 0) {
+        time = element.burstTime;
+        element.burstTime -= element.burstTime;
+      } else if (element.burstTime > this.quantum) {
+        time = this.quantum;
+        element.burstTime -= this.quantum;
+      } else {
+        time = element.burstTime;
+        element.burstTime -= element.burstTime;
+      }
+      minitl.push(inProc(name, time));
+
+      if (element.burstTime > 0) {
+        minitl.push(changeState(name));
+        this.enqueue(element);
+
+        let move = 0 - this.currentposition[element.pid] * shift;
+        this.relativeposition[element.pid] = move;
+        minitl.push(renterQueue(name, 1500, 0, move));
+        this.relativeposition[element.pid] =
+          this.relativeposition[element.pid] + diff * shift;
+        let movement = this.relativeposition[element.pid];
+        minitl.push(shiftinQueue(".p" + String(element.pid), 500, movement));
+      } else {
+        minitl.push(leaveProcDisperse(name));
+      }
+      tmline = tmline.concat(minitl);
+    }
 
     return tmline;
   }
