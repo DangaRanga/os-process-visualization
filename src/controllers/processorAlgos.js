@@ -308,7 +308,8 @@ export class RoundRobin extends ProcessorSchedulingAlgorithm {
         minitl.push(changeState(name));
         this.enqueue(element);
 
-        let move = (0 - this.currentposition[element.pid]) * shift;
+        let move =
+          (this.currentposition[element.pid] - this.queue.length) * shift;
         this.relativeposition[element.pid] = move;
         minitl.push(renterQueue(name, 1500, 0, move));
       } else {
