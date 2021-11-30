@@ -40,7 +40,7 @@ export class FCFS extends ProcessorSchedulingAlgorithm {
     super(processes);
     this.processes = processes.slice();
     this.queue = processes.slice();
-    this.sortqueue(this.queue, (a, b) => b.arrival - a.arrival);
+    this.sortqueue(this.queue, (a, b) => b.position - a.position);
     this.currentposition = {};
     this.sortedposition = {};
     this.relativeposition = {};
