@@ -175,6 +175,16 @@ export default {
       successNotification(
         "Animation Created, Begin simulation by clicking 'Start Simulation'"
       );
+
+      // Push Animation completed toast to animation
+      const notif = {
+        complete: function () {
+          successNotification("Animation completed!");
+          return;
+        },
+      };
+
+      this.animation.push(notif);
       this.$emit("animation-data", this.animation);
     },
     /**
