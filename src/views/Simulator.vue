@@ -54,6 +54,7 @@ export default {
       selectorData: {
         algorithm: null,
         processes: [],
+        processOrder: [],
       },
       animation: [], // Animation emitted
       animationCompleted: false,
