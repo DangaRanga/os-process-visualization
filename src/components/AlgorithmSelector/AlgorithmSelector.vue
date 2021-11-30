@@ -189,8 +189,9 @@ export default {
       }
       for (let i = 0; i < this.noProcesses; i++) {
         // Initialize all burst times as 0
-        this.processes.push(new Process(i + 1, 0, 0));
+        this.processes.push(new Process(i + 1, 0, 0, this.processOrder[i]));
       }
+      console.log(this.processes);
       return true;
     },
     burstTimeInputHandler(index, e) {
