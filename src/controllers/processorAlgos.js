@@ -219,8 +219,9 @@ export class SJF extends ProcessorSchedulingAlgorithm {
  * Class for the Round Robin algorithm
  */
 export class RoundRobin extends ProcessorSchedulingAlgorithm {
-  constructor(processes) {
+  constructor(processes, quantum) {
     super(processes);
+    this.quantum = quantum;
     this.queue = this.processes.slice();
     this.currentposition = {};
     this.sortedposition = {};
@@ -270,15 +271,13 @@ export class RoundRobin extends ProcessorSchedulingAlgorithm {
 
   generateTimeline() {
     var tmline = [];
-    var iteration = 1;
     const distanceTOCPU = 450,
       shift = 90;
 
     let update = this.assessQueue();
     tmline = tmline.concat(update);
 
-    while (iteration != 10) {
-      // while (this.queue.length != 0) {
+    while (this.queue.length != 0) {
       let element = this.dequeue();
       let name = ".p" + String(element.pid);
       let minitl = [];
@@ -291,19 +290,32 @@ export class RoundRobin extends ProcessorSchedulingAlgorithm {
           shiftinQueue(".p" + String(this.queue[i].pid), 500, movement)
         );
       }
-      console.log(this.relativeposition);
-      minitl.push(inProc(name, element.burstTime));
-      // minitl.push(leaveProcDisperse(name));
-      minitl.push(changeState(name));
-      this.enqueue(element);
-      let move = (0 - this.currentposition[element.pid]) * shift;
-      this.relativeposition[element.pid] = move;
-      minitl.push(renterQueue(name, 1500, 0, move));
-      tmline = tmline.concat(minitl);
-      iteration++;
-    }
 
-    console.log(tmline);
+      let time;
+      if (this.queue.length == 0) {
+        time = element.burstTime;
+        element.burstTime -= element.burstTime;
+      } else if (element.burstTime > this.quantum) {
+        time = this.quantum;
+        element.burstTime -= this.quantum;
+      } else {
+        time = element.burstTime;
+        element.burstTime -= element.burstTime;
+      }
+      minitl.push(inProc(name, time));
+
+      if (element.burstTime > 0) {
+        minitl.push(changeState(name));
+        this.enqueue(element);
+
+        let move = (0 - this.currentposition[element.pid]) * shift;
+        this.relativeposition[element.pid] = move;
+        minitl.push(renterQueue(name, 1500, 0, move));
+      } else {
+        minitl.push(leaveProcDisperse(name));
+      }
+      tmline = tmline.concat(minitl);
+    }
 
     return tmline;
   }
