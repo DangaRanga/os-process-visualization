@@ -5,7 +5,7 @@
       <h2>How it Works</h2>
       <div id="content">
         <p>{{ details.description }}</p>
-        <div id="process-gif"><img :src="details.gif" /></div>
+        <div id="process-gif"><img :src="getImgUrl(details.gif)" /></div>
       </div>
     </div>
     <div class="reasons">
@@ -42,6 +42,11 @@ export default {
   mounted() {
     console.log(this.name);
   },
+  methods: {
+    getImgUrl(pic) {
+      return require("../assets" + pic);
+    },
+  },
 
   computed: {
     details() {
@@ -61,10 +66,17 @@ export default {
   font-size: 1.5em;
 }
 
+img {
+  border-radius: 5px;
+  /* Base Screen 1 */
+
+  filter: drop-shadow(0px 0px 15px rgba(0, 0, 0, 0.28));
+}
 #content,
 .reasons {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  align-items: center;
 }
 
 .reasons {

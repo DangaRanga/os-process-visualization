@@ -27,7 +27,7 @@ export const algorithmDetails = {
       "The first process will get the CPU first, other processes can get the CPU only after the current process has finished its execution. Now, suppose the first process has large burst time, and other processes have less burst time, then the processes will have to wait more unnecessarily, this will result in more average waiting time.This effect results in lower CPU and device utilization.",
       "The FCFS algorithm is particularly troublesome for time-sharing systems, where it is important that each user get a share of the CPU at regular intervals",
     ],
-    gif: "../assets/FSFS.gif",
+    gif: "/FSFS.gif",
   },
 
   priority_scheduling: {
@@ -38,7 +38,7 @@ export const algorithmDetails = {
       "If high priority processes use up a lot of CPU time, lower priority processes may starve and be postponed indefinitely. ",
       "Deciding which process gets which priority level assigned to it can be problematic.",
     ],
-    gif: "../assets/Priority.gif",
+    gif: "/Priority.gif",
   },
 
   round_robin: {
@@ -51,7 +51,7 @@ export const algorithmDetails = {
       "The average waiting time while using a Round Robin is often times long.",
       "By making the quantum too short, this can lead to an increase in the overhead and a decrease in the CPU's efficiency. Likewise, by making it too long can cause poor responses to short processes",
     ],
-    gif: "../assets/RoundRobin.gif",
+    gif: "/RoundRobin.gif",
   },
 
   shortest_job_first: {
@@ -65,6 +65,6 @@ export const algorithmDetails = {
       "SJF may cause starvation, if shorter processes keep coming.",
       "It cannot be implemented at the level of short term CPU scheduling.",
     ],
-    gif: "../assets/SJF.gif",
+    gif: "/SJF.gif",
   },
 };
